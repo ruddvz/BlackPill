@@ -161,7 +161,7 @@ svg{display:block;flex-shrink:0;width:18px;height:18px}
 .hgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
 .hc{padding:15px;border-radius:var(--r-md);background:var(--surface);border:1px solid var(--bd);transition:transform .12s}
 .hc:active{transform:scale(.97)}
-.hc .hci{width:48px;height:48px;border-radius:14px;background:var(--pri-bg);color:var(--primary);
+.hc .hci{width:48px;height:48px;border-radius:14px;
   display:flex;align-items:center;justify-content:center;margin-bottom:11px}
 .hc .hci svg{width:23px;height:23px}
 .hc .hcn{font-size:15px;font-weight:700;letter-spacing:-.2px}
@@ -325,6 +325,74 @@ svg{display:block;flex-shrink:0;width:18px;height:18px}
 .spacer{height:8px}
 .disc-mini{font-size:11px;color:var(--faint);line-height:1.55;text-align:center;padding:14px 10px}
 .disc-mini a{color:var(--primary)}
+
+/* ===== accent token classes (themeable) ===== */
+.ac-mint{--ac:82,215,165}.ac-sky{--ac:107,168,255}.ac-purple{--ac:167,139,250}
+.ac-amber{--ac:255,184,77}.ac-pink{--ac:249,168,212}.ac-cyan{--ac:103,232,249}.ac-red{--ac:255,107,107}
+.acbox{background:rgba(var(--ac),0.14)!important;color:rgb(var(--ac))!important}
+
+/* ===== bottom nav: icon-only + active dot ===== */
+.bn{position:relative;padding:12px 2px 13px}
+.bn span.lbl{display:none}
+.bn svg{width:23px;height:23px}
+.bn .ndot{position:absolute;bottom:5px;left:50%;transform:translateX(-50%);width:5px;height:5px;border-radius:50%;background:var(--primary);opacity:0;transition:opacity .2s}
+.bn.on .ndot{opacity:1}
+.bn.on{background:transparent}
+
+/* ===== detail section card ===== */
+.dsec{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r-md);padding:15px;margin-bottom:12px;box-shadow:0 4px 20px rgba(0,0,0,.20)}
+.dsec-h{font-size:12px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;margin-bottom:13px;display:flex;align-items:center;gap:8px;color:var(--muted)}
+.dsec-h svg{width:15px;height:15px;color:var(--primary)}
+.dsec .ing:last-child,.dsec .step:last-child{margin-bottom:0}
+
+/* dosage pills */
+.dose-line{display:flex;flex-wrap:wrap;gap:8px}
+.dose-pill{display:inline-flex;align-items:center;gap:6px;background:var(--pri-bg);border:1px solid var(--pri-br);color:var(--primary);border-radius:99px;padding:8px 13px;font-size:12.5px;font-weight:700}
+.dose-pill svg{width:13px;height:13px}
+
+/* empty-state art */
+.estate{text-align:center;padding:54px 24px 30px}
+.estate .eart{width:86px;height:86px;border-radius:28px;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;
+  background:var(--pri-bg);border:1px solid var(--pri-br);color:var(--primary);position:relative}
+.estate .eart svg{width:38px;height:38px}
+.estate .eart::after{content:"";position:absolute;inset:-9px;border-radius:34px;border:1px dashed var(--bd2)}
+.estate .eh{font-size:17px;font-weight:700;margin-bottom:7px}
+.estate .es{font-size:13px;color:var(--muted);line-height:1.6;max-width:270px;margin:0 auto 18px}
+.estate .btn{max-width:230px;margin:0 auto}
+
+/* appearance segmented control */
+.seg{display:flex;gap:4px;background:var(--elev);border:1px solid var(--bd);border-radius:13px;padding:4px}
+.seg button{flex:1;padding:11px;border-radius:9px;font-size:13px;font-weight:700;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:7px;transition:.15s}
+.seg button.on{background:var(--surface);color:var(--primary);box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.seg button svg{width:15px;height:15px}
+
+/* ===== LIGHT (pastel) THEME ===== */
+html[data-theme="light"]{
+  --bg:#F3EFE8; --surface:#FFFFFF; --elev:#F6F2EB; --elev2:#ECE7DE;
+  --primary:#10A877; --primary-d:#0c8a61; --secondary:#3E80DC; --purple:#8268E0; --warn:#C4801A; --danger:#DE5168;
+  --text:#2B2535; --muted:#6C6675; --faint:#938E9C;
+  --bd:rgba(43,37,53,0.10); --bd2:rgba(43,37,53,0.15); --bd3:rgba(43,37,53,0.22);
+  --pri-bg:rgba(16,168,119,0.12); --pri-br:rgba(16,168,119,0.30);
+  --sec-bg:rgba(62,128,220,0.12); --sec-br:rgba(62,128,220,0.30);
+  --pur-bg:rgba(130,104,224,0.12); --pur-br:rgba(130,104,224,0.30);
+  --warn-bg:rgba(196,128,26,0.13); --warn-br:rgba(196,128,26,0.32);
+  --dan-bg:rgba(222,81,104,0.12); --dan-br:rgba(222,81,104,0.30);
+}
+html[data-theme="light"] body{background:var(--bg);color:var(--text)}
+html[data-theme="light"] .card,html[data-theme="light"] .rcard,html[data-theme="light"] .cg,html[data-theme="light"] .hc,
+html[data-theme="light"] .qrow,html[data-theme="light"] .ing,html[data-theme="light"] .step,html[data-theme="light"] .codebig,
+html[data-theme="light"] .qa-item,html[data-theme="light"] .mini,html[data-theme="light"] .dsec,html[data-theme="light"] .tabs,
+html[data-theme="light"] .cact,html[data-theme="light"] .chip,html[data-theme="light"] .seg{box-shadow:0 2px 10px rgba(43,37,53,0.06)}
+html[data-theme="light"] .bnav-pill{background:rgba(255,255,255,0.90);box-shadow:0 8px 30px rgba(43,37,53,0.14)}
+html[data-theme="light"] .amb b{opacity:.42}
+html[data-theme="light"] .btn{color:#fff}
+html[data-theme="light"] .ac-mint{--ac:16,168,119}
+html[data-theme="light"] .ac-sky{--ac:47,120,210}
+html[data-theme="light"] .ac-purple{--ac:130,100,225}
+html[data-theme="light"] .ac-amber{--ac:196,128,20}
+html[data-theme="light"] .ac-pink{--ac:205,85,150}
+html[data-theme="light"] .ac-cyan{--ac:18,148,168}
+html[data-theme="light"] .ac-red{--ac:218,80,100}
 </style>
 </head>
 <body>
@@ -424,18 +492,22 @@ var IC={
  mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',
  kidney:'<path d="M8 3C5 3 3 6 3 10s2 7 5 7c2 0 3-1.5 3-4 0-3-2-3-2-5s2-2 2-3.5C11 3.8 10 3 8 3z"/><path d="M16 3c3 0 5 3 5 7s-2 7-5 7c-2 0-3-1.5-3-4 0-3 2-3 2-5s-2-2-2-3.5C13 3.8 14 3 16 3z"/>',
  mars:'<circle cx="10" cy="14" r="5"/><line x1="14" y1="10" x2="20" y2="4"/><polyline points="15 4 20 4 20 9"/>',
- flask:'<path d="M9 2h6M10 2v6.5L4.8 17a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 8.5V2"/><line x1="7.5" y1="14" x2="16.5" y2="14"/>'
+ flask:'<path d="M9 2h6M10 2v6.5L4.8 17a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 8.5V2"/><line x1="7.5" y1="14" x2="16.5" y2="14"/>',
+ moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/>'
 };
 var EICON={burns:'flame',poisoning:'flask'};
 function svg(k,cls){return '<svg '+(cls?'class="'+cls+'" ':'')+'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(IC[k]||IC.sparkle)+'</svg>';}
 
-var ACCVAR={mint:'var(--primary)',lavender:'var(--purple)',peach:'var(--warn)',sky:'var(--secondary)',blush:'var(--danger)',lemon:'var(--warn)',lilac:'var(--purple)',sage:'var(--primary)',rose:'#f9a8d4',cyan:'#67e8f9'};
-var ACCRGB={mint:'82,215,165',lavender:'167,139,250',peach:'255,184,77',sky:'107,168,255',blush:'255,107,107',lemon:'255,184,77',lilac:'167,139,250',sage:'82,215,165',rose:'249,168,212',cyan:'103,232,249'};
+/* accent KEY system (themeable via CSS .ac-* classes) */
+var ACCMAP={mint:'mint',lavender:'purple',peach:'amber',sky:'sky',blush:'red',lemon:'amber',lilac:'purple',sage:'mint',rose:'pink',cyan:'cyan'};
+var PAL=['mint','sky','purple','amber','pink','cyan'];
 
-/* remedy category -> icon + accent rgb */
-var RCAT={Respiratory:['lungs','107,168,255'],Digestive:['stomach','255,184,77'],Pain:['bandage','255,107,107'],
- Skin:['sparkle','249,168,212'],Immunity:['shield','82,215,165'],'Heart & Metabolic':['heart','255,107,107'],
- Reproductive:['venus','167,139,250'],Dental:['tooth','103,232,249'],Emergency:['alert','255,107,107']};
+/* remedy category -> [icon, accent key] */
+var RCAT={Respiratory:['lungs','sky'],Digestive:['stomach','amber'],Pain:['bandage','red'],
+ Skin:['sparkle','pink'],Immunity:['shield','mint'],'Heart & Metabolic':['heart','red'],
+ Reproductive:['venus','purple'],Dental:['tooth','cyan'],Emergency:['alert','red']};
+function acDot(extraClass,key,icon){return '<div class="'+extraClass+' acbox ac-'+key+'">'+svg(icon)+'</div>';}
+
 
 /* safety notes for codes */
 var NOTES={
@@ -513,13 +585,12 @@ function qaItem(icon,label,tone,path){
   return '<button class="qa-item" onclick="go(\''+path+'\')"><div class="qa-ic '+tone+'">'+svg(icon)+'</div><div class="qa-lbl">'+label+'</div></button>';
 }
 function recentMini(r){
-  var ic='code',rgb='82,215,165';
-  if(r.type==='remedy'){var rm=RBYID(r.id);if(rm){var ci=RCAT[rm.cat]||['remedy','82,215,165'];ic=ci[0];rgb=ci[1];}}
-  else if(r.type==='herb'){ic='leaf';rgb='82,215,165';}
-  else if(r.type==='code'){ic='code';rgb='167,139,250';}
-  else if(r.type==='compound'){ic='leaf';rgb='107,168,255';}
-  var href=recentHref(r);
-  return '<a class="mini" href="'+href+'"><div class="mi" style="background:rgba('+rgb+',0.14);color:rgb('+rgb+')">'+svg(ic)+'</div><div class="mn">'+esc(r.label)+'</div><div class="ms">'+esc(r.sub||'')+'</div></a>';
+  var ic='code',key='purple';
+  if(r.type==='remedy'){var rm=RBYID(r.id);if(rm){var ci=RCAT[rm.cat]||['remedy','mint'];ic=ci[0];key=ci[1];}}
+  else if(r.type==='herb'){ic='leaf';key=PAL[(parseInt(r.id,10)||0)%PAL.length];}
+  else if(r.type==='code'){ic='code';key='purple';}
+  else if(r.type==='compound'){ic='leaf';key='sky';}
+  return '<a class="mini" href="'+recentHref(r)+'">'+acDot('mi',key,ic)+'<div class="mn">'+esc(r.label)+'</div><div class="ms">'+esc(r.sub||'')+'</div></a>';
 }
 function recentHref(r){
   if(r.type==='remedy')return '#/remedy/'+r.id;
@@ -554,10 +625,10 @@ function renderRemList(){
   list.innerHTML=arr.map(remedyCard).join('')||'<div class="empty">Nothing here.</div>';
 }
 function remedyCard(r){
-  var ci=RCAT[r.cat]||['remedy','82,215,165'];
+  var ci=RCAT[r.cat]||['remedy','mint'];
   var fav=isFav('remedies',r.id);
   return '<a class="rcard" href="#/remedy/'+r.id+'">'
-   +'<div class="ric" style="background:rgba('+ci[1]+',0.14);color:rgb('+ci[1]+')">'+svg(ci[0])+'</div>'
+   +acDot('ric',ci[1],ci[0])
    +'<div class="rb"><div class="rt">'+esc(r.name)+'</div><div class="rd">'+esc(r.cat)+(r.popular?' · Popular':'')+'</div>'
    +'<div class="rmeta"><span>'+svg('clock')+esc(r.time)+'</span><span>'+svg('gauge')+esc(r.diff)+'</span></div></div>'
    +'<button class="bk'+(fav?' on':'')+'" onclick="event.preventDefault();event.stopPropagation();favRem(this,\''+r.id+'\')" aria-label="Bookmark">'+svg('star')+'</button>'
@@ -566,79 +637,53 @@ function remedyCard(r){
 function favRem(btn,id){toggleFav('remedies',id);btn.classList.toggle('on',isFav('remedies',id));}
 
 /* ============== REMEDY DETAIL ============== */
-var remTab='Overview';
 function vRemedy(id){
   var r=RBYID(id);if(!r){go('remedies');return;}
   addRecent('remedy',id,r.name,r.cat);
-  remTab='Overview';
-  var ci=RCAT[r.cat]||['remedy','82,215,165'];
+  var ci=RCAT[r.cat]||['remedy','mint'];var key=ci[1];
   var fav=isFav('remedies',id);
-  var benefits={};r.ingredients.forEach(function(it){var hb=HBYN[it.n];if(hb&&hb.benefits)benefits[hb.benefits]=1;});
-  var h=topBack(r.name)
-   +'<div class="wrap">'
-   +'<div class="hero" style="background:linear-gradient(135deg,rgba('+ci[1]+',0.22),rgba('+ci[1]+',0.05))">'
-     +'<div class="hicon" style="color:rgb('+ci[1]+')">'+svg(ci[0])+'</div>'
-     +'<div class="hcat" style="color:rgb('+ci[1]+')">'+esc(r.cat)+'</div>'
+  var hb0=HBYN[r.ingredients[0].n];
+  var h=topBack(r.name)+'<div class="wrap">'
+   +'<div class="hero ac-'+key+'" style="background:linear-gradient(135deg,rgba(var(--ac),0.20),rgba(var(--ac),0.05))">'
+     +'<button class="icon-btn'+(fav?' on':'')+'" id="remFav" style="position:absolute;right:16px;top:16px" onclick="favRemDetail(\''+id+'\')" aria-label="Save">'+svg('star')+'</button>'
+     +'<div class="hicon" style="color:rgb(var(--ac))">'+svg(ci[0])+'</div>'
+     +'<div class="hcat" style="color:rgb(var(--ac))">'+esc(r.cat)+'</div>'
      +'<div class="hname">'+esc(r.name)+'</div><div class="hsum">'+esc(r.summary)+'</div>'
      +'<div class="hstats"><span class="hstat">'+svg('clock')+esc(r.time)+'</span><span class="hstat">'+svg('gauge')+esc(r.diff)+'</span>'+(r.popular?'<span class="hstat">'+svg('flame')+'Popular</span>':'')+'</div>'
-   +'</div>'
-   +'<button class="icon-btn'+(fav?' on':'')+'" id="remFav" onclick="favRemDetail(\''+id+'\')" style="position:absolute"></button>'
-   +'<div class="tabs" id="remTabs">'
-     +[['Overview','Overview'],['Ingredients','Ingredients'],['Preparation','Steps'],['Dosage','Dosage'],['Warnings','Safety']].map(function(t){return '<button class="tab'+(t[0]==='Overview'?' on':'')+'" data-k="'+t[0]+'" onclick="setRemTab(\''+t[0]+'\')">'+t[1]+'</button>';}).join('')
-   +'</div><div id="remBody"></div></div>';
+   +'</div>';
+  // ingredients
+  h+='<div class="dsec"><div class="dsec-h">'+svg('leaf')+'Ingredients · '+r.ingredients.length+'</div>'
+   +r.ingredients.map(function(it){var hb=HBYN[it.n];return '<a class="ing" href="#/herb/'+it.n+'"><div class="inn">'+it.n+'</div><div class="inb"><div class="innm">'+esc(it.herb)+'</div><div class="ineng">'+esc(hb?hb.en:'')+'</div></div><div class="inq">'+esc(it.qty)+'</div></a>';}).join('');
+  if(r.extra)h+='<div class="warnbox"><span>'+svg('info')+'</span><div>Also add: '+esc(r.extra)+'</div></div>';
+  h+='<div class="p" style="margin-top:6px;font-size:11.5px;color:var(--faint)">1 scoop = 1/8 tbsp &asymp; 0.2 g. Use only the kit scoop.</div></div>';
+  // preparation
+  h+='<div class="dsec"><div class="dsec-h">'+svg('remedy')+'Preparation</div>'
+   +r.steps.map(function(s,i){return '<div class="step"><div class="sn">'+(i+1)+'</div><div class="st">'+esc(s)+'</div></div>';}).join('')+'</div>';
+  // dosage
+  h+='<div class="dsec"><div class="dsec-h">'+svg('clock')+'Dosage</div><div class="p" style="margin-bottom:10px">Take <b>'+esc(r.freq.toLowerCase().indexOf('time')>=0||r.freq.toLowerCase().indexOf('twice')>=0||r.freq.toLowerCase().indexOf('thrice')>=0?r.freq.toLowerCase():r.freq)+'</b>.</div>'+dosageChips(r.freq)+'</div>';
+  // safety
+  h+='<div class="dsec"><div class="dsec-h">'+svg('alert')+'Safety</div>';
+  (r.warn||[]).forEach(function(w){h+='<div class="warnbox dan"><span>'+svg('alert')+'</span><div>'+esc(w)+'</div></div>';});
+  h+='<div class="warnbox"><span>'+svg('info')+'</span><div>A traditional home remedy, <b>not medical advice</b>. Avoid in pregnancy, for infants, or for serious conditions without professional guidance. Stop if any reaction occurs.</div></div></div>';
+  h+='</div>';
   setView(h);
-  // place favorite button into hero top-right
-  var fb=document.getElementById('remFav');
-  if(fb){fb.innerHTML=svg('star');fb.style.position='absolute';fb.style.top='';
-    // move into hero corner
-    var hero=document.querySelector('.hero');hero.style.position='relative';
-    fb.style.position='absolute';fb.style.right='18px';fb.style.top='18px';hero.appendChild(fb);}
-  renderRemBody(r);
 }
 function favRemDetail(id){toggleFav('remedies',id);var b=document.getElementById('remFav');if(b)b.classList.toggle('on',isFav('remedies',id));}
-function setRemTab(t){remTab=t;var tb=document.querySelectorAll('#remTabs .tab');
-  for(var i=0;i<tb.length;i++)tb[i].classList.toggle('on',tb[i].getAttribute('data-k')===t);
-  renderRemBody(RBYID(curRemId));}
-var curRemId=null;
-function renderRemBody(r){
-  curRemId=r.id;var h='';
-  if(remTab==='Overview'){
-    h+='<div class="blk"><div class="blk-h">'+svg('info')+'What it\'s for</div><div class="p">'+esc(r.summary)+'</div></div>';
-    h+='<div class="blk"><div class="blk-h">'+svg('leaf')+'Contains</div><div style="display:flex;flex-wrap:wrap;gap:7px">'+r.ingredients.map(function(it){return '<a class="hstat" href="#/herb/'+it.n+'">'+esc(it.herb)+'</a>';}).join('')+'</div></div>';
-    h+='<div class="blk"><div class="blk-h">'+svg('clock')+'How often</div><div class="p"><b>'+esc(r.freq)+'</b> · '+esc(r.time)+' to prepare</div></div>';
-  } else if(remTab==='Ingredients'){
-    h+=r.ingredients.map(function(it){var hb=HBYN[it.n];
-      return '<a class="ing" href="#/herb/'+it.n+'"><div class="inn">'+it.n+'</div><div class="inb"><div class="innm">'+esc(it.herb)+'</div><div class="ineng">'+esc(hb?hb.en:'')+'</div></div><div class="inq">'+esc(it.qty)+'</div></a>';
-    }).join('');
-    if(r.extra)h+='<div class="warnbox"><span>'+svg('info')+'</span><div>Also: '+esc(r.extra)+'</div></div>';
-    h+='<div class="p" style="margin-top:6px">1 scoop = 1/8 tablespoon &asymp; 0.2 g. Use only the tiny scoop from your kit.</div>';
-  } else if(remTab==='Preparation'){
-    h+=r.steps.map(function(s,i){return '<div class="step"><div class="sn">'+(i+1)+'</div><div class="st">'+esc(s)+'</div></div>';}).join('');
-  } else if(remTab==='Dosage'){
-    h+='<div class="blk"><div class="blk-h">'+svg('clock')+'Frequency</div><div class="p"><b>'+esc(r.freq)+'</b></div></div>';
-    h+='<div class="blk-h">'+svg('sun')+'Suggested times</div>'+dosageGrid(r.freq);
-    h+='<div class="p">Spread the doses through the day. Take with the preparation method shown.</div>';
-  } else if(remTab==='Warnings'){
-    if(r.warn&&r.warn.length)h+=r.warn.map(function(w){return '<div class="warnbox dan"><span>'+svg('alert')+'</span><div>'+esc(w)+'</div></div>';}).join('');
-    h+='<div class="warnbox"><span>'+svg('info')+'</span><div>This is a traditional home remedy, <b>not medical advice</b>. Not for pregnancy, infants or serious conditions without professional guidance. Stop if any reaction occurs and seek care.</div></div>';
-  }
-  document.getElementById('remBody').innerHTML='<div class="fade">'+h+'</div>';
+function dosageChips(freq){
+  var f=freq.toLowerCase(),slots;
+  if(/as needed/.test(f))return chipLine([['clock','As needed']]);
+  if(/after dinner/.test(f))return chipLine([['clock','After dinner']]);
+  if(/first aid|one time/.test(f))return chipLine([['alert','One time only']]);
+  if(/twice|2 time/.test(f))slots=[['sun','Morning'],['moon','Evening']];
+  else if(/thrice|3 time/.test(f))slots=[['sun','Morning'],['sun','Afternoon'],['moon','Evening']];
+  else if(/once|1 time/.test(f))slots=[['sun','Once daily']];
+  else if(/4-5|5 time|4 time|3-4/.test(f))slots=[['sun','Morning'],['sun','Afternoon'],['moon','Evening'],['moon','Night']];
+  else if(/2-3/.test(f))slots=[['sun','Morning'],['sun','Afternoon'],['moon','Evening']];
+  else slots=[['sun','Morning'],['moon','Evening']];
+  return chipLine(slots);
 }
-function dosageGrid(freq){
-  var n=4;var f=freq.toLowerCase();
-  var slots=['Morning','Afternoon','Evening','Night'];var ic=['sun','sun','sun','sun'];
-  var on=[1,1,1,1];
-  if(/once|1 time|after dinner/.test(f)){on=[0,0,/dinner/.test(f)?1:0,/dinner/.test(f)?0:1];if(!/dinner/.test(f))on=[1,0,0,0];}
-  else if(/twice|2 time/.test(f)){on=[1,0,1,0];}
-  else if(/thrice|3 time/.test(f)){on=[1,1,1,0];}
-  else if(/4-5|4 to 5|5 time/.test(f)){on=[1,1,1,1];}
-  else if(/3-4|3 to 4|4 time/.test(f)){on=[1,1,1,1];}
-  else if(/2-3/.test(f)){on=[1,1,1,0];}
-  else if(/as needed/.test(f)){on=[0,0,0,0];}
-  var h='<div class="dgrid">';
-  for(var i=0;i<4;i++)h+='<div class="dcell'+(on[i]?' on':'')+'"><div class="di">'+svg(i<3?'sun':'clock')+'</div><div class="dl">'+slots[i]+'</div></div>';
-  h+='</div>';return h;
-}
+function chipLine(arr){return '<div class="dose-line">'+arr.map(function(s){return '<span class="dose-pill">'+svg(s[0])+s[1]+'</span>';}).join('')+'</div>';}
+
 
 /* ================= CODES ================= */
 function vCodes(){
@@ -648,8 +693,8 @@ function vCodes(){
    +'<div class="sect-h"><div class="h">Browse by category</div></div><div class="cgrid">';
   QHC.forEach(function(s){
     var n=0;s.groups.forEach(function(g){n+=g.codes.length;});
-    var rgb=ACCRGB[s.accent]||'167,139,250';
-    h+='<a class="cg" href="#/codes/'+s.id+'"><div class="cgi" style="background:rgba('+rgb+',0.14);color:rgb('+rgb+')">'+svg(s.icon)+'</div><div class="cgl">'+esc(s.label)+'</div><div class="cgc">'+n+'</div></a>';
+    var key=ACCMAP[s.accent]||'purple';
+    h+='<a class="cg" href="#/codes/'+s.id+'">'+acDot('cgi',key,s.icon)+'<div class="cgl">'+esc(s.label)+'</div><div class="cgc">'+n+'</div></a>';
   });
   h+='</div>';
   var popular=['headache','anxiety','insomnia','stress','back pain','cold'];
@@ -730,10 +775,10 @@ function renderLib(){
 }
 var PAL=['82,215,165','107,168,255','167,139,250','255,184,77','249,168,212','103,232,249'];
 function herbCard(h){
-  var rgb=PAL[h.n%PAL.length];
-  return '<a class="hc" href="#/herb/'+h.n+'"><div class="hci" style="background:rgba('+rgb+',0.13);color:rgb('+rgb+')">'+svg('leaf')+'</div>'
+  var key=PAL[h.n%PAL.length];
+  return '<a class="hc ac-'+key+'" href="#/herb/'+h.n+'">'+acDot('hci',key,'leaf')
    +'<div class="hcn">'+esc(h.name)+'</div><div class="hce">'+esc(h.en)+' · '+esc(h.part)+'</div>'
-   +'<div class="hcb" style="color:rgb('+rgb+')">'+esc(h.benefits||'')+'</div></a>';
+   +'<div class="hcb" style="color:rgb(var(--ac))">'+esc(h.benefits||'')+'</div></a>';
 }
 function compoundRow(c){
   return '<a class="rcard" href="#/compound/'+c.n+'"><div class="ric" style="background:var(--sec-bg);color:var(--secondary)">'+svg('leaf')+'</div><div class="rb"><div class="rt">'+esc(c.compound.split(/[,(]/)[0])+'</div><div class="rd">from '+esc(c.herb)+'</div></div>'+svg('chev')+'</a>';
@@ -794,7 +839,12 @@ function vEmergencyDetail(id){
 /* ================= MORE ================= */
 function vMore(){
   var favN=(FAV.remedies.length+FAV.codes.length+FAV.herbs.length);
+  var t=curTheme();
   var h=topBack('More','Hospital in a Box')+'<div class="wrap">'
+   +'<div class="dsec"><div class="dsec-h">'+svg('sun')+'Appearance</div><div class="seg" id="themeSeg">'
+     +'<button data-t="light"'+(t==='light'?' class="on"':'')+' onclick="setTheme(\'light\')">'+svg('sun')+'Light</button>'
+     +'<button data-t="dark"'+(t==='dark'?' class="on"':'')+' onclick="setTheme(\'dark\')">'+svg('moon')+'Dark</button>'
+   +'</div></div>'
    +moreRow('star','Favorites',favN+' saved','favorites')
    +moreRow('info','How to use & water codes','Methods, intention, water codes','howto')
    +moreRow('alert','Safety notice','Important — please read','gate')
@@ -812,7 +862,7 @@ function vFavorites(){
   if(FAV.remedies.length){any=true;h+='<div class="sr-h">Remedies</div>';FAV.remedies.forEach(function(id){var r=RBYID(id);if(r)h+=remedyCard(r);});}
   if(FAV.codes.length){any=true;h+='<div class="sr-h">Codes</div>';FAV.codes.forEach(function(idx){if(CODES[idx])h+=codeRow(idx);});}
   if(FAV.herbs.length){any=true;h+='<div class="sr-h">Herbs</div><div class="hgrid">';FAV.herbs.forEach(function(n){if(HBYN[n])h+=herbCard(HBYN[n]);});h+='</div>';}
-  if(!any)h+='<div class="empty">'+svg('star')+'No favorites yet. Tap the star on any remedy, code or herb to save it here.</div>';
+  if(!any)h+=emptyArt('star','Nothing saved yet','Tap the star on any remedy, code or herb and it will appear here for quick access.','Browse remedies','remedies');
   h+='</div>';setView(h);
 }
 function vHowto(){
@@ -875,7 +925,7 @@ function runSearch(q){
   if(ci.length){h+='<div class="sr-h">Healing codes ('+ci.length+(ci.length>=40?'+':'')+')</div>'+ci.map(codeRow).join('');}
   var cp=COMPOUNDS.filter(function(c){return (c.compound+' '+c.herb+' '+c.use).toLowerCase().indexOf(q)>=0;});
   if(cp.length){h+='<div class="sr-h">Compounds ('+cp.length+')</div>'+cp.slice(0,6).map(compoundRow).join('');}
-  if(!h)h='<div class="empty">'+svg('search')+'No results for &ldquo;'+esc(q)+'&rdquo;.</div>';
+  if(!h)h=emptyArt('search','No results','Nothing matches &ldquo;'+esc(q)+'&rdquo;. Try another word — a symptom, remedy, herb or condition.',null);
   box.innerHTML=h;
 }
 function seed(t){var i=document.getElementById('sInput');if(i){i.value=t;i.focus();}doSearch(t);}
@@ -902,9 +952,20 @@ function acceptGate(){save('hib_ack',1);document.getElementById('gate').classLis
 var TABS=[['home','Home','home'],['remedies','Remedies','remedy'],['codes','Codes','code'],['library','Library','leaf'],['more','More','more']];
 function buildNav(){
   document.getElementById('bnav').innerHTML=TABS.map(function(t){
-    return '<a class="bn" id="bn-'+t[0]+'" href="#/'+t[0]+'">'+svg(t[2])+t[1]+'</a>';
+    return '<a class="bn" id="bn-'+t[0]+'" href="#/'+t[0]+'" aria-label="'+t[1]+'">'+svg(t[2])+'<span class="lbl">'+t[1]+'</span><span class="ndot"></span></a>';
   }).join('');
 }
+function emptyArt(icon,title,sub,ctaLabel,ctaPath){
+  return '<div class="estate"><div class="eart">'+svg(icon)+'</div><div class="eh">'+esc(title)+'</div><div class="es">'+esc(sub)+'</div>'
+   +(ctaLabel?'<a class="btn" href="#/'+ctaPath+'">'+ctaLabel+'</a>':'')+'</div>';
+}
+/* theme */
+function setTheme(t){
+  document.documentElement.setAttribute('data-theme',t);save('hib_theme',t);
+  var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',t==='light'?'#F3EFE8':'#0F1115');
+  var segs=document.querySelectorAll('#themeSeg button');for(var i=0;i<segs.length;i++)segs[i].classList.toggle('on',segs[i].getAttribute('data-t')===t);
+}
+function curTheme(){return document.documentElement.getAttribute('data-theme')||'dark';}
 function setNav(active){
   TABS.forEach(function(t){var el=document.getElementById('bn-'+t[0]);if(el)el.classList.toggle('on',t[0]===active);});
 }
@@ -936,6 +997,7 @@ function router(){
   else vHome();
 }
 window.addEventListener('hashchange',router);
+setTheme(load('hib_theme','dark'));
 buildNav();
 if(!location.hash)location.hash='#/home';
 router();
