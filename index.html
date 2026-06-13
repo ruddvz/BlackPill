@@ -18,7 +18,7 @@
   --bg:#0F1115; --surface:#171A21; --elev:#1F2430; --elev2:#262C39;
   --primary:#52D7A5; --primary-d:#2ea882; --secondary:#6BA8FF; --purple:#A78BFA;
   --warn:#FFB84D; --danger:#FF6B6B;
-  --text:#F5F7FA; --muted:#9AA4B2; --faint:#6B7280;
+  --text:#F5F7FA; --muted:#9AA4B2; --faint:#828B99;
   --bd:rgba(255,255,255,0.07); --bd2:rgba(255,255,255,0.11); --bd3:rgba(255,255,255,0.16);
   --r-lg:24px; --r-md:18px; --r-sm:14px;
   --pri-bg:rgba(82,215,165,0.12); --pri-br:rgba(82,215,165,0.30);
@@ -33,7 +33,7 @@ body{
   font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
   background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;
   -webkit-font-smoothing:antialiased;overflow-x:hidden;overscroll-behavior-y:none;
-  padding-bottom:calc(110px + env(safe-area-inset-bottom,0px));
+  padding-bottom:calc(140px + env(safe-area-inset-bottom,0px));
 }
 button{font-family:inherit;border:none;background:none;cursor:pointer;color:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 input{font-family:inherit;-webkit-appearance:none;appearance:none}
@@ -134,7 +134,7 @@ svg{display:block;flex-shrink:0;width:18px;height:18px}
 .rcard .rmeta{display:flex;gap:10px;margin-top:7px}
 .rcard .rmeta span{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;color:var(--faint);font-weight:600}
 .rcard .rmeta svg{width:11px;height:11px}
-.bk{color:var(--faint);flex-shrink:0;padding:4px}
+.bk{color:var(--faint);flex-shrink:0;width:42px;height:42px;display:flex;align-items:center;justify-content:center;border-radius:12px}
 .bk.on{color:var(--primary)}
 .pop-badge{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--warn);
   background:var(--warn-bg);border:1px solid var(--warn-br);border-radius:6px;padding:2px 6px}
@@ -142,19 +142,19 @@ svg{display:block;flex-shrink:0;width:18px;height:18px}
 /* chips */
 .chips{display:flex;gap:8px;overflow-x:auto;padding:2px 18px 2px;margin:0 -18px 4px;scrollbar-width:none}
 .chips::-webkit-scrollbar{display:none}
-.chip{flex-shrink:0;padding:8px 15px;border-radius:99px;background:var(--surface);border:1px solid var(--bd);
+.chip{flex-shrink:0;min-height:38px;display:inline-flex;align-items:center;padding:8px 16px;border-radius:99px;background:var(--surface);border:1px solid var(--bd);
   font-size:12.5px;font-weight:600;color:var(--muted);white-space:nowrap;transition:.15s}
 .chip.on{background:var(--pri-bg);border-color:var(--pri-br);color:var(--primary)}
 .chip:active{opacity:.7}
 
 /* category grid (codes) */
 .cgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.cg{display:flex;flex-direction:column;align-items:center;gap:9px;padding:16px 6px;border-radius:var(--r-md);
+.cg{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;padding:16px 6px;min-height:118px;border-radius:var(--r-md);
   background:var(--surface);border:1px solid var(--bd);transition:transform .12s}
 .cg:active{transform:scale(.95)}
 .cg .cgi{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center}
 .cg .cgi svg{width:21px;height:21px}
-.cg .cgl{font-size:11px;font-weight:600;text-align:center;line-height:1.25;color:var(--text)}
+.cg .cgl{font-size:11px;font-weight:600;text-align:center;line-height:1.25;color:var(--text);min-height:2.5em;display:flex;align-items:center;justify-content:center}
 .cg .cgc{font-size:10px;color:var(--faint);font-weight:600}
 
 /* herb grid */
@@ -197,7 +197,7 @@ svg{display:block;flex-shrink:0;width:18px;height:18px}
 /* tabs */
 .tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--bd);border-radius:13px;padding:4px;margin-bottom:16px;overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
-.tab{flex:1;white-space:nowrap;padding:9px 12px;border-radius:9px;font-size:12.5px;font-weight:700;color:var(--muted);transition:.15s}
+.tab{flex:0 0 auto;white-space:nowrap;padding:9px 15px;border-radius:9px;font-size:12.5px;font-weight:700;color:var(--muted);transition:.15s}
 .tab.on{background:var(--elev);color:var(--primary)}
 
 .blk{margin-bottom:18px}
@@ -423,8 +423,10 @@ var IC={
  tool:'<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.7-.7-2.5z"/>',
  mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',
  kidney:'<path d="M8 3C5 3 3 6 3 10s2 7 5 7c2 0 3-1.5 3-4 0-3-2-3-2-5s2-2 2-3.5C11 3.8 10 3 8 3z"/><path d="M16 3c3 0 5 3 5 7s-2 7-5 7c-2 0-3-1.5-3-4 0-3 2-3 2-5s-2-2-2-3.5C13 3.8 14 3 16 3z"/>',
- mars:'<circle cx="10" cy="14" r="5"/><line x1="14" y1="10" x2="20" y2="4"/><polyline points="15 4 20 4 20 9"/>'
+ mars:'<circle cx="10" cy="14" r="5"/><line x1="14" y1="10" x2="20" y2="4"/><polyline points="15 4 20 4 20 9"/>',
+ flask:'<path d="M9 2h6M10 2v6.5L4.8 17a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 8.5V2"/><line x1="7.5" y1="14" x2="16.5" y2="14"/>'
 };
+var EICON={burns:'flame',poisoning:'flask'};
 function svg(k,cls){return '<svg '+(cls?'class="'+cls+'" ':'')+'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(IC[k]||IC.sparkle)+'</svg>';}
 
 var ACCVAR={mint:'var(--primary)',lavender:'var(--purple)',peach:'var(--warn)',sky:'var(--secondary)',blush:'var(--danger)',lemon:'var(--warn)',lilac:'var(--purple)',sage:'var(--primary)',rose:'#f9a8d4',cyan:'#67e8f9'};
@@ -481,8 +483,8 @@ function vHome(){
   var greet=hr<12?'Good morning':hr<18?'Good afternoon':'Good evening';
   var h=''
    +'<div class="top"><div class="top-row">'
-     +'<div style="flex:1"><div class="t-greet">'+greet+' '+svg('leaf','')+'</div><div class="t-h1">How can we help?</div></div>'
-     +'<div class="avatar">'+svg('heart')+'</div>'
+     +'<div style="flex:1;min-width:0"><div class="t-greet">'+greet+' '+svg('leaf','')+'</div><div class="t-h1">Hospital <span style="color:var(--primary)">in a Box</span></div></div>'
+     +'<button class="avatar" onclick="go(\'more\')" aria-label="Menu">'+svg('heart')+'</button>'
    +'</div></div>'
    +'<div class="wrap">'
    +'<div class="search" onclick="go(\'search\')"><span>'+svg('search')+'</span><input readonly placeholder="Search symptoms, remedies, codes…" inputmode="search"><span class="t-pri" style="display:flex;width:28px;height:28px;border-radius:9px;align-items:center;justify-content:center">'+svg('mic')+'</span></div>'
@@ -491,7 +493,7 @@ function vHome(){
      +qaItem('remedy','Find Remedy','t-pri','remedies')
      +qaItem('code','Healing Codes','t-pur','codes')
      +qaItem('leaf','Herb Library','t-sec','library')
-     +qaItem('alert','Emergency','t-dan','emergency')
+     +qaItem('star','Favorites','t-warn','favorites')
    +'</div>'
    +'<div class="sect-h"><div class="h">If it\'s urgent</div></div>'
    +'<a class="emerg-card" href="#/emergency"><div class="ec-ic">'+svg('alert')+'</div><div class="ec-t"><div class="ec-h">Emergency guidance</div><div class="ec-s">Chest pain, stroke, bleeding & more</div></div><div class="ec-go">'+svg('chev')+'</div></a>';
@@ -582,7 +584,7 @@ function vRemedy(id){
    +'</div>'
    +'<button class="icon-btn'+(fav?' on':'')+'" id="remFav" onclick="favRemDetail(\''+id+'\')" style="position:absolute"></button>'
    +'<div class="tabs" id="remTabs">'
-     +['Overview','Ingredients','Preparation','Dosage','Warnings'].map(function(t){return '<button class="tab'+(t==='Overview'?' on':'')+'" onclick="setRemTab(\''+t+'\')">'+t+'</button>';}).join('')
+     +[['Overview','Overview'],['Ingredients','Ingredients'],['Preparation','Steps'],['Dosage','Dosage'],['Warnings','Safety']].map(function(t){return '<button class="tab'+(t[0]==='Overview'?' on':'')+'" data-k="'+t[0]+'" onclick="setRemTab(\''+t[0]+'\')">'+t[1]+'</button>';}).join('')
    +'</div><div id="remBody"></div></div>';
   setView(h);
   // place favorite button into hero top-right
@@ -595,16 +597,15 @@ function vRemedy(id){
 }
 function favRemDetail(id){toggleFav('remedies',id);var b=document.getElementById('remFav');if(b)b.classList.toggle('on',isFav('remedies',id));}
 function setRemTab(t){remTab=t;var tb=document.querySelectorAll('#remTabs .tab');
-  for(var i=0;i<tb.length;i++)tb[i].classList.toggle('on',tb[i].textContent===t);
+  for(var i=0;i<tb.length;i++)tb[i].classList.toggle('on',tb[i].getAttribute('data-k')===t);
   renderRemBody(RBYID(curRemId));}
 var curRemId=null;
 function renderRemBody(r){
   curRemId=r.id;var h='';
   if(remTab==='Overview'){
-    var bl={};r.ingredients.forEach(function(it){var hb=HBYN[it.n];if(hb&&hb.benefits)hb.benefits.split(', ').forEach(function(b){bl[b]=1;});});
-    h+='<div class="blk"><div class="blk-h">'+svg('info')+'Overview</div><div class="p">'+esc(r.summary)+'</div></div>';
-    h+='<div class="blk"><div class="blk-h">'+svg('heart')+'May support</div><div style="display:flex;flex-wrap:wrap;gap:7px">'+Object.keys(bl).map(function(b){return '<span class="hstat">'+esc(b)+'</span>';}).join('')+'</div></div>';
-    h+='<div class="blk"><div class="blk-h">'+svg('clock')+'How often</div><div class="p"><b>'+esc(r.freq)+'</b></div></div>';
+    h+='<div class="blk"><div class="blk-h">'+svg('info')+'What it\'s for</div><div class="p">'+esc(r.summary)+'</div></div>';
+    h+='<div class="blk"><div class="blk-h">'+svg('leaf')+'Contains</div><div style="display:flex;flex-wrap:wrap;gap:7px">'+r.ingredients.map(function(it){return '<a class="hstat" href="#/herb/'+it.n+'">'+esc(it.herb)+'</a>';}).join('')+'</div></div>';
+    h+='<div class="blk"><div class="blk-h">'+svg('clock')+'How often</div><div class="p"><b>'+esc(r.freq)+'</b> · '+esc(r.time)+' to prepare</div></div>';
   } else if(remTab==='Ingredients'){
     h+=r.ingredients.map(function(it){var hb=HBYN[it.n];
       return '<a class="ing" href="#/herb/'+it.n+'"><div class="inn">'+it.n+'</div><div class="inb"><div class="innm">'+esc(it.herb)+'</div><div class="ineng">'+esc(hb?hb.en:'')+'</div></div><div class="inq">'+esc(it.qty)+'</div></a>';
@@ -727,8 +728,12 @@ function renderLib(){
     b.innerHTML=COMPOUNDS.map(compoundRow).join('');
   }
 }
+var PAL=['82,215,165','107,168,255','167,139,250','255,184,77','249,168,212','103,232,249'];
 function herbCard(h){
-  return '<a class="hc" href="#/herb/'+h.n+'"><div class="hci">'+svg('leaf')+'</div><div class="hcn">'+esc(h.name)+'</div><div class="hce">'+esc(h.en)+'</div><div class="hcb">'+esc(h.benefits||'')+'</div></a>';
+  var rgb=PAL[h.n%PAL.length];
+  return '<a class="hc" href="#/herb/'+h.n+'"><div class="hci" style="background:rgba('+rgb+',0.13);color:rgb('+rgb+')">'+svg('leaf')+'</div>'
+   +'<div class="hcn">'+esc(h.name)+'</div><div class="hce">'+esc(h.en)+' · '+esc(h.part)+'</div>'
+   +'<div class="hcb" style="color:rgb('+rgb+')">'+esc(h.benefits||'')+'</div></a>';
 }
 function compoundRow(c){
   return '<a class="rcard" href="#/compound/'+c.n+'"><div class="ric" style="background:var(--sec-bg);color:var(--secondary)">'+svg('leaf')+'</div><div class="rb"><div class="rt">'+esc(c.compound.split(/[,(]/)[0])+'</div><div class="rd">from '+esc(c.herb)+'</div></div>'+svg('chev')+'</a>';
@@ -765,7 +770,7 @@ function vEmergency(){
   var h=topBack('Emergency','Act fast — call for help first')+'<div class="wrap">'
    +'<a class="emerg-card" href="tel:112" style="margin-bottom:14px"><div class="ec-ic">'+svg('phone')+'</div><div class="ec-t"><div class="ec-h">Call emergency services</div><div class="ec-s">Do this first in any emergency</div></div><div class="ec-go">'+svg('chev')+'</div></a>';
   EMERG.forEach(function(e){
-    h+='<a class="rcard" href="#/emergency/'+e.id+'"><div class="ric" style="background:var(--dan-bg);color:var(--danger)">'+svg(e.icon)+'</div><div class="rb"><div class="rt">'+esc(e.name)+'</div><div class="rd">Immediate first-aid steps</div></div>'+svg('chev')+'</a>';
+    h+='<a class="rcard" href="#/emergency/'+e.id+'"><div class="ric" style="background:var(--dan-bg);color:var(--danger)">'+svg(EICON[e.id]||e.icon)+'</div><div class="rb"><div class="rt">'+esc(e.name)+'</div><div class="rd">Immediate first-aid steps</div></div>'+svg('chev')+'</a>';
   });
   h+='<div class="disc-mini">These are general first-aid reminders, not a substitute for training or professional help. When in doubt, call your local emergency number.</div></div>';
   setView(h);
