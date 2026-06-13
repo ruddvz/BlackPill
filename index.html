@@ -4,22 +4,24 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#0e0c14">
-<meta name="color-scheme" content="dark">
-<meta name="supported-color-schemes" content="dark">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#faf6ef">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
 <title>Hospital in a Box</title>
 <style>
 /* ============================================================
    FORCE DARK - nuclear, works in every WebView
    ============================================================ */
-:root{color-scheme:dark}
-html{background:#0e0c14!important;color-scheme:dark;-webkit-text-size-adjust:100%}
+:root{color-scheme:light}
+html{background:#faf6ef!important;color-scheme:light;-webkit-text-size-adjust:100%}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
-  background:#0e0c14!important;
-  color:#f2ede8!important;
+  background:#faf6ef!important;
+  color:#2c2538!important;
   font-size:15px;line-height:1.5;
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
@@ -27,7 +29,7 @@ body{
   padding-bottom:calc(100px + env(safe-area-inset-bottom,0px));
 }
 @media(prefers-color-scheme:light){
-  html,body{background:#0e0c14!important;color:#f2ede8!important}
+  html,body{background:#faf6ef!important;color:#2c2538!important}
 }
 button{font-family:inherit;border:none;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 input{font-family:inherit;-webkit-appearance:none;appearance:none}
@@ -38,40 +40,40 @@ svg{display:block;flex-shrink:0}
    PASTEL TOKEN SYSTEM
    ============================================================ */
 :root{
-  /* Warm dark backgrounds */
-  --bg0:#0e0c14;
-  --bg1:#141020;
-  --bg2:#1a1628;
-  --bg3:#221e30;
-  --bg4:#2c2840;
+  /* Warm light backgrounds */
+  --bg0:#faf6ef;
+  --bg1:#f4efe6;
+  --bg2:#efe9df;
+  --bg3:#e9e2d6;
+  --bg4:#e2dace;
 
-  /* Solid card surfaces - no transparency issues */
-  --card:#1c1828;
-  --card2:#221e30;
-  --card3:#2a2640;
+  /* Card surfaces */
+  --card:#ffffff;
+  --card2:#faf6ef;
+  --card3:#f3eee5;
 
   /* Borders */
-  --bd:rgba(255,255,255,0.09);
-  --bd2:rgba(255,255,255,0.14);
-  --bd3:rgba(255,255,255,0.20);
+  --bd:rgba(60,45,80,0.10);
+  --bd2:rgba(60,45,80,0.16);
+  --bd3:rgba(60,45,80,0.24);
 
   /* Text */
-  --t1:#f2ede8;
-  --t2:rgba(242,237,232,0.72);
-  --t3:rgba(242,237,232,0.50);
-  --t4:rgba(242,237,232,0.28);
+  --t1:#2c2538;
+  --t2:rgba(44,37,56,0.74);
+  --t3:rgba(44,37,56,0.54);
+  --t4:rgba(44,37,56,0.42);
 
-  /* Pastel accents */
-  --mint:#6ee7b7;      --mint-bg:rgba(110,231,183,0.12); --mint-br:rgba(110,231,183,0.28);
-  --lavender:#c4b5fd;  --lav-bg:rgba(196,181,253,0.12);  --lav-br:rgba(196,181,253,0.28);
-  --peach:#fdba74;     --peach-bg:rgba(253,186,116,0.12);--peach-br:rgba(253,186,116,0.28);
-  --sky:#93c5fd;       --sky-bg:rgba(147,197,253,0.12);  --sky-br:rgba(147,197,253,0.28);
-  --blush:#fca5a5;     --blush-bg:rgba(252,165,165,0.12);--blush-br:rgba(252,165,165,0.28);
-  --lemon:#fde68a;     --lemon-bg:rgba(253,230,138,0.12);--lemon-br:rgba(253,230,138,0.28);
-  --lilac:#d8b4fe;     --lilac-bg:rgba(216,180,254,0.12);--lilac-br:rgba(216,180,254,0.28);
-  --sage:#86efac;      --sage-bg:rgba(134,239,172,0.12); --sage-br:rgba(134,239,172,0.28);
-  --rose:#f9a8d4;      --rose-bg:rgba(249,168,212,0.12); --rose-br:rgba(249,168,212,0.28);
-  --cyan:#67e8f9;      --cyan-bg:rgba(103,232,249,0.12); --cyan-br:rgba(103,232,249,0.28);
+  /* Pastel accents - deeper 'ink' for readable text on light */
+  --mint:#0d9f6e;      --mint-bg:rgba(13,159,110,0.10); --mint-br:rgba(13,159,110,0.26);
+  --lavender:#7559e8;  --lav-bg:rgba(117,89,232,0.10);  --lav-br:rgba(117,89,232,0.26);
+  --peach:#dd7a2e;     --peach-bg:rgba(221,122,46,0.10);--peach-br:rgba(221,122,46,0.26);
+  --sky:#2f7fd6;       --sky-bg:rgba(47,127,214,0.10);  --sky-br:rgba(47,127,214,0.26);
+  --blush:#dd4f68;     --blush-bg:rgba(221,79,104,0.10);--blush-br:rgba(221,79,104,0.26);
+  --lemon:#b0860d;     --lemon-bg:rgba(176,134,13,0.10);--lemon-br:rgba(176,134,13,0.26);
+  --lilac:#9a55d8;     --lilac-bg:rgba(154,85,216,0.10);--lilac-br:rgba(154,85,216,0.26);
+  --sage:#2f9e44;      --sage-bg:rgba(47,158,68,0.10);  --sage-br:rgba(47,158,68,0.26);
+  --rose:#d24f93;      --rose-bg:rgba(210,79,147,0.10); --rose-br:rgba(210,79,147,0.26);
+  --cyan:#0e93a8;      --cyan-bg:rgba(14,147,168,0.10); --cyan-br:rgba(14,147,168,0.26);
 }
 
 /* ============================================================
@@ -80,11 +82,11 @@ svg{display:block;flex-shrink:0}
 .ambient{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 .orb{position:absolute;border-radius:50%}
 .o1{width:480px;height:480px;top:-160px;right:-100px;
-    background:radial-gradient(circle,rgba(196,181,253,0.10) 0%,transparent 65%)}
+    background:radial-gradient(circle,rgba(168,150,250,0.18) 0%,transparent 65%)}
 .o2{width:380px;height:380px;top:500px;left:-130px;
-    background:radial-gradient(circle,rgba(110,231,183,0.08) 0%,transparent 65%)}
+    background:radial-gradient(circle,rgba(80,200,160,0.15) 0%,transparent 65%)}
 .o3{width:300px;height:300px;bottom:200px;right:-70px;
-    background:radial-gradient(circle,rgba(147,197,253,0.07) 0%,transparent 65%)}
+    background:radial-gradient(circle,rgba(120,180,250,0.14) 0%,transparent 65%)}
 
 .app{position:relative;z-index:1;max-width:520px;margin:0 auto}
 
@@ -98,7 +100,7 @@ svg{display:block;flex-shrink:0}
   min-height:calc(56px + env(safe-area-inset-top,0px));
   padding-top:calc(10px + env(safe-area-inset-top,0px));
   padding-bottom:10px;
-  background:#0e0c14;
+  background:#ffffff;
   border-bottom:1px solid var(--bd);
 }
 @supports(-webkit-backdrop-filter:blur(1px)){.hdr{-webkit-backdrop-filter:blur(20px)}}
@@ -143,15 +145,15 @@ svg{display:block;flex-shrink:0}
 /* ============================================================
    POPOVERS
    ============================================================ */
-.pop-overlay{display:none;position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.6)}
+.pop-overlay{display:none;position:fixed;inset:0;z-index:80;background:rgba(45,33,60,0.30)}
 .pop-overlay.open{display:block}
 .pop{
   display:none;position:fixed;z-index:81;
   top:calc(62px + env(safe-area-inset-top,0px));
   width:calc(100vw - 32px);max-width:300px;
-  background:#1a1628;border:1px solid var(--bd3);
+  background:#ffffff;border:1px solid var(--bd3);
   border-radius:22px;padding:18px;
-  box-shadow:0 24px 60px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,0.06);
+  box-shadow:0 24px 60px rgba(70,55,95,0.18),inset 0 1px 0 rgba(255,255,255,0.06);
 }
 .pop.left{left:16px}.pop.right{right:16px}.pop.open{display:block}
 .pop-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:13px}
@@ -214,9 +216,9 @@ svg{display:block;flex-shrink:0}
 }
 .bnav-pill{
   display:flex;gap:3px;width:100%;
-  background:#0e0c14;
+  background:#ffffff;
   border:1px solid var(--bd2);border-radius:32px;padding:4px;
-  box-shadow:0 8px 40px rgba(0,0,0,.65),0 2px 8px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,0.06);
+  box-shadow:0 8px 40px rgba(70,55,95,0.18),0 2px 8px rgba(70,55,95,0.18),inset 0 1px 0 rgba(255,255,255,0.06);
   pointer-events:all;
 }
 @supports(-webkit-backdrop-filter:blur(1px)){.bnav-pill{-webkit-backdrop-filter:blur(32px)}}
@@ -379,12 +381,12 @@ svg{display:block;flex-shrink:0}
   background:var(--card);
   border:1px solid var(--bd);
   border-radius:22px;overflow:hidden;
-  box-shadow:0 2px 16px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,0.05);
+  box-shadow:0 2px 16px rgba(70,55,95,0.12),inset 0 1px 0 rgba(255,255,255,0.05);
   transition:box-shadow .2s,border-color .2s;
 }
 .rcard:has(.racc:checked){
   border-color:rgba(110,231,183,0.3);
-  box-shadow:0 4px 24px rgba(0,0,0,.3),0 0 0 1px rgba(110,231,183,0.10),inset 0 1px 0 rgba(255,255,255,0.05);
+  box-shadow:0 4px 24px rgba(70,55,95,0.15),0 0 0 1px rgba(110,231,183,0.10),inset 0 1px 0 rgba(255,255,255,0.05);
 }
 
 .rhead{
@@ -455,7 +457,7 @@ svg{display:block;flex-shrink:0}
 .icard{
   display:flex;align-items:center;gap:12px;
   background:var(--card);border:1px solid var(--bd);border-radius:18px;
-  padding:12px 13px;box-shadow:0 2px 12px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,0.04);
+  padding:12px 13px;box-shadow:0 2px 12px rgba(70,55,95,0.09),inset 0 1px 0 rgba(255,255,255,0.04);
 }
 .inum{
   width:38px;height:38px;min-width:38px;
@@ -484,12 +486,12 @@ svg{display:block;flex-shrink:0}
 .qstack2{display:flex;flex-direction:column;gap:9px}
 .qsect{
   background:var(--card);border:1px solid var(--bd);border-radius:22px;overflow:hidden;
-  box-shadow:0 2px 16px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,0.04);
+  box-shadow:0 2px 16px rgba(70,55,95,0.11),inset 0 1px 0 rgba(255,255,255,0.04);
   transition:box-shadow .2s,border-color .2s;
 }
 .qsect:has(.qacc:checked){
   border-color:rgba(196,181,253,0.30);
-  box-shadow:0 4px 24px rgba(0,0,0,.28),0 0 0 1px rgba(196,181,253,0.08),inset 0 1px 0 rgba(255,255,255,0.04);
+  box-shadow:0 4px 24px rgba(70,55,95,0.14),0 0 0 1px rgba(196,181,253,0.08),inset 0 1px 0 rgba(255,255,255,0.04);
 }
 .qshead{
   display:flex;align-items:center;gap:12px;padding:14px 13px;
@@ -543,7 +545,7 @@ svg{display:block;flex-shrink:0}
 .acard{
   display:flex;align-items:flex-start;gap:12px;
   background:var(--card);border:1px solid var(--bd);border-radius:18px;
-  padding:13px;box-shadow:0 2px 12px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,0.04);
+  padding:13px;box-shadow:0 2px 12px rgba(70,55,95,0.09),inset 0 1px 0 rgba(255,255,255,0.04);
 }
 .anum{
   width:34px;height:34px;min-width:34px;
@@ -570,7 +572,7 @@ svg{display:block;flex-shrink:0}
 .qstack{display:flex;flex-direction:column;gap:10px}
 .qcard{
   background:var(--card);border:1px solid var(--bd);border-radius:22px;padding:17px;
-  box-shadow:0 2px 12px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,0.04);
+  box-shadow:0 2px 12px rgba(70,55,95,0.09),inset 0 1px 0 rgba(255,255,255,0.04);
 }
 .qtitle{
   font-size:14px;font-weight:700;color:var(--t1);margin-bottom:10px;
@@ -593,7 +595,7 @@ svg{display:block;flex-shrink:0}
 .ebox{
   background:rgba(252,165,165,0.08);border:1.5px solid rgba(252,165,165,0.30);
   border-radius:22px;padding:16px;display:flex;gap:13px;
-  box-shadow:0 2px 16px rgba(0,0,0,.2);
+  box-shadow:0 2px 16px rgba(70,55,95,0.1);
 }
 .eico{color:var(--blush);flex-shrink:0;margin-top:2px}
 .etitle{font-size:14px;font-weight:700;color:var(--blush);margin-bottom:7px}
@@ -679,10 +681,10 @@ svg{display:block;flex-shrink:0}
 .toast{
   position:fixed;left:50%;transform:translateX(-50%) translateY(20px);
   bottom:calc(86px + env(safe-area-inset-bottom,0px));z-index:120;
-  background:#221e30;border:1px solid var(--bd3);
+  background:#ffffff;border:1px solid var(--bd3);
   border-radius:99px;padding:10px 18px;
   font-size:13px;font-weight:600;color:var(--t1);
-  box-shadow:0 12px 40px rgba(0,0,0,.6);
+  box-shadow:0 12px 40px rgba(70,55,95,0.18);
   opacity:0;pointer-events:none;transition:opacity .2s,transform .25s;
   display:flex;align-items:center;gap:8px;max-width:90vw;
 }
@@ -692,7 +694,7 @@ svg{display:block;flex-shrink:0}
 
 /* Safety gate (first run) */
 .gate{
-  position:fixed;inset:0;z-index:200;background:rgba(8,6,12,.92);
+  position:fixed;inset:0;z-index:200;background:rgba(45,33,60,0.45);
   display:none;align-items:center;justify-content:center;padding:20px;
   padding-top:calc(20px + env(safe-area-inset-top,0px));
   padding-bottom:calc(20px + env(safe-area-inset-bottom,0px));
@@ -701,9 +703,9 @@ svg{display:block;flex-shrink:0}
 @supports(backdrop-filter:blur(1px)){.gate{backdrop-filter:blur(10px)}}
 .gate.open{display:flex}
 .gate-card{
-  background:#1a1628;border:1px solid var(--bd3);border-radius:24px;
+  background:#ffffff;border:1px solid var(--bd3);border-radius:24px;
   max-width:440px;width:100%;padding:24px 22px;margin:auto;
-  box-shadow:0 30px 80px rgba(0,0,0,.7);
+  box-shadow:0 30px 80px rgba(70,55,95,0.18);
 }
 .gate-ico{
   width:52px;height:52px;border-radius:16px;margin:0 auto 16px;
@@ -727,13 +729,53 @@ svg{display:block;flex-shrink:0}
 .gate-emerg b{color:var(--blush)}
 .gate-btn{
   display:block;width:100%;text-align:center;
-  background:var(--mint);color:#0e0c14;
+  background:var(--mint);color:#ffffff;
   border-radius:14px;padding:14px;font-size:15px;font-weight:800;
   letter-spacing:-.2px;margin-top:6px;transition:opacity .15s;
 }
 .gate-btn:active{opacity:.85}
 .gate-note{font-size:11px;color:var(--t4);text-align:center;margin-top:11px;line-height:1.5}
 
+
+/* ============================================================
+   ADDED: view toggle, A–Z index, intention helper
+   ============================================================ */
+.seg{display:flex;gap:4px;background:var(--card2);border:1px solid var(--bd);border-radius:13px;padding:4px;margin:0 0 12px}
+.seg-btn{flex:1;padding:8px;border-radius:10px;font-size:12.5px;font-weight:700;color:var(--t3);transition:background .15s,color .15s}
+.seg-btn.active{background:var(--card);color:var(--lavender);box-shadow:0 1px 5px rgba(70,55,95,0.10)}
+.seg-btn:active{opacity:.7}
+
+.az-letter{
+  position:sticky;top:calc(56px + env(safe-area-inset-top,0px));z-index:5;
+  background:var(--bg0);font-size:13px;font-weight:800;color:var(--lavender);
+  letter-spacing:.5px;padding:10px 4px 6px;border-bottom:1px solid var(--bd);
+}
+#codesAZ .qrow{padding-left:4px;padding-right:4px}
+.qtag{
+  display:inline-block;margin-left:8px;font-size:9px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.4px;color:var(--t4);background:var(--card2);border:1px solid var(--bd);
+  border-radius:6px;padding:1px 6px;vertical-align:middle;white-space:nowrap;
+}
+
+.helper{background:var(--card);border:1px solid var(--lav-br);border-radius:16px;margin:0 0 12px;overflow:hidden;box-shadow:0 2px 12px rgba(70,55,95,0.06)}
+.helper>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:13px 14px;font-size:13.5px;font-weight:700;color:var(--t1)}
+.helper>summary::-webkit-details-marker{display:none}
+.hchev{margin-left:auto;color:var(--t4);transition:transform .25s}
+.helper[open] .hchev{transform:rotate(180deg)}
+.helper-ico{width:30px;height:30px;min-width:30px;border-radius:9px;background:var(--lav-bg);border:1px solid var(--lav-br);display:flex;align-items:center;justify-content:center;color:var(--lavender)}
+.helper-ico svg{width:16px;height:16px}
+.helper-body{padding:2px 14px 14px;font-size:12.5px;color:var(--t2);line-height:1.7}
+.helper-body p{margin-bottom:9px}
+.helper-body p:last-child{margin-bottom:0}
+.helper-body b{color:var(--t1)}
+.wcode{
+  display:inline-flex;align-items:center;gap:5px;cursor:pointer;
+  font-family:"Courier New",monospace;font-size:12px;font-weight:700;color:var(--lavender);
+  background:var(--lav-bg);border:1px solid var(--lav-br);border-radius:7px;padding:3px 9px;margin:3px 5px 1px 0;
+  -webkit-tap-highlight-color:transparent;touch-action:manipulation;transition:transform .1s;
+}
+.wcode svg{width:11px;height:11px;opacity:.55}
+.wcode:active{transform:scale(.94)}
 </style>
 </head>
 <body>
@@ -917,7 +959,30 @@ svg{display:block;flex-shrink:0}
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
         <div class="disc-strip-t"><b>Not medical advice.</b> These codes are an energy-healing belief practice with no scientific evidence. Never use them in place of professional care or prescribed treatment. In an emergency, call your local emergency number first. <a onclick="openGate(true)">Read full notice</a></div>
       </div>
+
+      <details class="helper" id="intentionHelper">
+        <summary>
+          <span class="helper-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><path d="M12 8l1.2 2.8L16 12l-2.8 1.2L12 16l-1.2-2.8L8 12l2.8-1.2z"/></svg></span>
+          Setting an intention &amp; the Water Codes
+          <svg class="hchev" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </summary>
+        <div class="helper-body">
+          <p><b>Set an intention first.</b> Decide clearly what you want to support, then apply a code &mdash; write it on or over the area, or copy it (tap any code) and hold your phone over the spot.</p>
+          <p><b>Add it to food or water.</b> Hold the intention, then place the code with your food or drink before you consume it.</p>
+          <p><b>The Water Codes.</b> The source says to write these on opposite sides of a water container to &ldquo;create a vortex&rdquo; that puts healing into the water:<br>
+            <span class="wcode" onclick="copyCode(this,'99 77 654')">99 77 654 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span>
+            <span class="wcode" onclick="copyCode(this,'44 66 111')">44 66 111 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span></p>
+          <p><b>One code for food.</b> <span class="wcode" onclick="copyCode(this,'88 44 578')">88 44 578 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></span> &mdash; the source says this increases the life-giving nutrition of food: &ldquo;if you are only going to use one code, this is the one to use.&rdquo;</p>
+          <p style="color:var(--t4);font-size:11px">Keep every space exactly as shown &mdash; the source says the codes will not work without them.</p>
+        </div>
+      </details>
+
+      <div class="seg" id="codesSeg">
+        <button class="seg-btn active" data-view="cat" onclick="setView(this,'cat')">By system</button>
+        <button class="seg-btn" data-view="az" onclick="setView(this,'az')">A&ndash;Z index</button>
+      </div>
       <div id="codesRoot"></div>
+      <div id="codesAZ" style="display:none"></div>
     </div>
 
     <div class="panel" id="p-actives">
@@ -1129,7 +1194,7 @@ var ICONS = {
  paw:'<circle cx="6.5" cy="11" r="2"/><circle cx="17.5" cy="11" r="2"/><circle cx="9.5" cy="6.5" r="2"/><circle cx="14.5" cy="6.5" r="2"/><path d="M12 14c-2.5 0-5 1.8-5 4a2.5 2.5 0 0 0 2.5 2.5c1 0 1.5-.5 2.5-.5s1.5.5 2.5.5A2.5 2.5 0 0 0 17 18c0-2.2-2.5-4-5-4z"/>',
  tool:'<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.7-.7-2.5z"/>'
 };
-var ACC = {mint:'110,231,183',lavender:'196,181,253',peach:'253,186,116',sky:'147,197,253',blush:'252,165,165',lemon:'253,230,138',lilac:'216,180,254',sage:'134,239,172',rose:'249,168,212',cyan:'103,232,249'};
+var ACC = {mint:'13,159,110',lavender:'117,89,232',peach:'221,122,46',sky:'47,127,214',blush:'221,79,104',lemon:'176,134,13',lilac:'154,85,216',sage:'47,158,68',rose:'210,79,147',cyan:'14,147,168'};
 
 var NOTES = {
  emergency:{t:'This describes a medical emergency. Call your local emergency number and get to a hospital now &mdash; a number is not a treatment.',i:'<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>'},
@@ -1199,6 +1264,45 @@ function applyCat(){
   for(var i=0;i<secs.length;i++){
     secs[i].style.display=(curCat==='all'||secs[i].getAttribute('data-qcat')===curCat)?'':'none';
   }
+}
+
+/* ---- A–Z index view ---- */
+var viewMode='cat';
+var COPYSVG='<svg class="qcopiedicon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+function azRowHTML(it){
+  var cls='qrow'+(it.w?(' flag-'+it.w):'');
+  var note=''; if(it.w){var nn=NOTES[it.w]; note='<div class="qnote '+it.w+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'+nn.i+'</svg><div>'+nn.t+'</div></div>';}
+  return '<div class="'+cls+'"><div class="qcode" onclick="copyCode(this,\''+it.c+'\')" title="Tap to copy">'+esc(it.c)+COPYSVG+'</div>'
+    +'<div class="qdesc">'+esc(it.d)+'<span class="qtag">'+esc(it.sec)+'</span>'+note+'</div></div>';
+}
+function buildAZ(){
+  var root=document.getElementById('codesAZ'); if(!root||root.getAttribute('data-built'))return;
+  var items=[];
+  QHC.forEach(function(s){s.groups.forEach(function(g){g.codes.forEach(function(c){
+    var k=c.d.toLowerCase().replace(/^[‘’"']+/,'').replace(/^(to the |for the |to a |for a |for an |to an |to |for )/,'').replace(/^[^a-z0-9]+/,'').trim();
+    items.push({c:c.c,d:c.d,w:c.w,sec:s.label,key:k});
+  });});});
+  items.sort(function(a,b){return a.key<b.key?-1:(a.key>b.key?1:0);});
+  var h='',cur='';
+  items.forEach(function(it){
+    var L=it.key.charAt(0).toUpperCase(); if(L<'A'||L>'Z')L='#';
+    if(L!==cur){cur=L; h+='<div class="az-letter">'+L+'</div>';}
+    h+=azRowHTML(it);
+  });
+  h+='<div class="nores" id="azNoRes" style="display:none">No codes match your search.</div>';
+  root.innerHTML=h; root.setAttribute('data-built','1');
+}
+function setView(btn,mode){
+  viewMode=mode;
+  var btns=document.querySelectorAll('#codesSeg .seg-btn');
+  for(var i=0;i<btns.length;i++) btns[i].classList.toggle('active',btns[i]===btn);
+  if(mode==='az')buildAZ();
+  var cr=document.getElementById('codesRoot'),az=document.getElementById('codesAZ');
+  if(cr)cr.style.display=(mode==='cat')?'':'none';
+  if(az)az.style.display=(mode==='az')?'':'none';
+  var inp=document.getElementById('si');
+  doFilter(inp?inp.value.toLowerCase().trim():'');
+  window.scrollTo(0,0);
 }
 
 /* ---- copy ---- */
@@ -1274,8 +1378,26 @@ function doFilter(q){
     }
   }
   var nr=document.getElementById('codesNoRes');
-  if(nr)nr.style.display=(q&&!anySec)?'block':'none';
-  if(wrap)wrap.style.display=q?'none':'';
+  if(nr)nr.style.display=(q&&!anySec&&viewMode==='cat')?'block':'none';
+  /* A–Z view: row-level filter + letter headers */
+  var azRoot=document.getElementById('codesAZ'),azAny=false;
+  if(azRoot){
+    var arows=azRoot.querySelectorAll('.qrow');
+    for(var a=0;a<arows.length;a++){var r2=arows[a];
+      if(!q){r2.classList.remove('search-hidden');azAny=true;}
+      else{var tx2=(r2.textContent||'').toLowerCase();var hit2=tx2.indexOf(q)>=0;r2.classList.toggle('search-hidden',!hit2);if(hit2)azAny=true;}
+    }
+    var lets=azRoot.querySelectorAll('.az-letter');
+    for(var b=0;b<lets.length;b++){var lt=lets[b],any=false,node2=lt.nextElementSibling;
+      while(node2&&node2.classList&&node2.classList.contains('qrow')){
+        if(!node2.classList.contains('search-hidden')){any=true;break;} node2=node2.nextElementSibling;
+      }
+      lt.style.display=(q&&!any)?'none':'';
+    }
+    var azn=document.getElementById('azNoRes');
+    if(azn)azn.style.display=(q&&!azAny&&viewMode==='az')?'block':'none';
+  }
+  if(wrap)wrap.style.display=(q||viewMode==='az')?'none':'';
 }
 
 /* ---- popovers ---- */
@@ -1304,6 +1426,9 @@ function acceptGate(){try{localStorage.setItem('hib_ack','1');}catch(e){}var g=d
   try{closeAllPops();}catch(e){}
   var ack=null;try{ack=localStorage.getItem('hib_ack');}catch(e){}
   if(!ack)openGate();
+  if('serviceWorker' in navigator){
+    window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});
+  }
 })();
 </script>
 </body>
