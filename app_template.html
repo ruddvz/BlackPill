@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0F1115">
+<meta name="color-scheme" content="dark">
+<title>Hospital in a Box</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0F1115; --surface:#171A21; --elev:#1F2430; --elev2:#262C39;
+  --primary:#52D7A5; --primary-d:#2ea882; --secondary:#6BA8FF; --purple:#A78BFA;
+  --warn:#FFB84D; --danger:#FF6B6B;
+  --text:#F5F7FA; --muted:#9AA4B2; --faint:#6B7280;
+  --bd:rgba(255,255,255,0.07); --bd2:rgba(255,255,255,0.11); --bd3:rgba(255,255,255,0.16);
+  --r-lg:24px; --r-md:18px; --r-sm:14px;
+  --pri-bg:rgba(82,215,165,0.12); --pri-br:rgba(82,215,165,0.30);
+  --sec-bg:rgba(107,168,255,0.12); --sec-br:rgba(107,168,255,0.30);
+  --pur-bg:rgba(167,139,250,0.12); --pur-br:rgba(167,139,250,0.30);
+  --warn-bg:rgba(255,184,77,0.12); --warn-br:rgba(255,184,77,0.30);
+  --dan-bg:rgba(255,107,107,0.12); --dan-br:rgba(255,107,107,0.30);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);-webkit-text-size-adjust:100%}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;overscroll-behavior-y:none;
+  padding-bottom:calc(110px + env(safe-area-inset-bottom,0px));
+}
+button{font-family:inherit;border:none;background:none;cursor:pointer;color:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+input{font-family:inherit;-webkit-appearance:none;appearance:none}
+a{color:inherit;text-decoration:none;-webkit-tap-highlight-color:transparent}
+svg{display:block;flex-shrink:0;width:18px;height:18px}
+.t-greet svg{width:14px;height:14px;display:inline-block}
+::-webkit-scrollbar{width:0;height:0}
+
+/* ambient glow */
+.amb{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.amb b{position:absolute;border-radius:50%;filter:blur(40px)}
+.amb .a1{width:300px;height:300px;top:-120px;right:-80px;background:rgba(82,215,165,0.10)}
+.amb .a2{width:260px;height:260px;top:40%;left:-110px;background:rgba(107,168,255,0.08)}
+.amb .a3{width:220px;height:220px;bottom:60px;right:-70px;background:rgba(167,139,250,0.07)}
+
+.app{position:relative;z-index:1;max-width:520px;margin:0 auto;min-height:100vh}
+
+/* ===== top bar ===== */
+.top{position:sticky;top:0;z-index:50;padding:calc(12px + env(safe-area-inset-top,0px)) 18px 12px;
+  background:linear-gradient(180deg,var(--bg) 70%,rgba(15,17,21,0));}
+.top-row{display:flex;align-items:center;gap:12px;min-height:40px}
+.t-back{width:38px;height:38px;border-radius:50%;background:var(--surface);border:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:center;color:var(--text);transition:transform .12s}
+.t-back:active{transform:scale(.9)}
+.t-title{font-size:19px;font-weight:800;letter-spacing:-.4px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.t-sub{font-size:12px;color:var(--muted);font-weight:500}
+.t-greet{font-size:13px;color:var(--muted);font-weight:500;display:flex;align-items:center;gap:6px}
+.t-h1{font-size:24px;font-weight:800;letter-spacing:-.6px;margin-top:2px}
+.avatar{width:42px;height:42px;border-radius:50%;background:var(--pri-bg);border:1px solid var(--pri-br);
+  display:flex;align-items:center;justify-content:center;color:var(--primary);flex-shrink:0}
+.icon-btn{width:38px;height:38px;border-radius:50%;background:var(--surface);border:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:center;color:var(--muted);transition:transform .12s}
+.icon-btn:active{transform:scale(.9)}
+.icon-btn.on{color:var(--primary);background:var(--pri-bg);border-color:var(--pri-br)}
+
+.wrap{padding:4px 18px 24px}
+.sect-h{display:flex;align-items:center;justify-content:space-between;margin:22px 2px 12px}
+.sect-h .h{font-size:17px;font-weight:700;letter-spacing:-.3px}
+.sect-h .more{font-size:12.5px;color:var(--primary);font-weight:600}
+
+/* ===== search ===== */
+.search{display:flex;align-items:center;gap:11px;background:var(--surface);border:1px solid var(--bd2);
+  border-radius:16px;padding:13px 15px;transition:border-color .18s,box-shadow .18s}
+.search:focus-within{border-color:var(--pri-br);box-shadow:0 0 0 3px var(--pri-bg)}
+.search svg{color:var(--faint)}
+.search input{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:16px}
+.search input::placeholder{color:var(--faint)}
+.search .clr{display:none;color:var(--muted)}
+.search .clr.v{display:block}
+
+/* ===== quick actions ===== */
+.qa{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.qa-item{display:flex;flex-direction:column;align-items:center;gap:8px;padding:14px 6px;border-radius:var(--r-md);
+  background:var(--surface);border:1px solid var(--bd);transition:transform .12s}
+.qa-item:active{transform:scale(.95)}
+.qa-ic{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center}
+.qa-ic svg{width:22px;height:22px}
+.qa-lbl{font-size:11px;font-weight:600;color:var(--muted);text-align:center;line-height:1.25}
+.t-pri{background:var(--pri-bg);color:var(--primary)} .t-sec{background:var(--sec-bg);color:var(--secondary)}
+.t-pur{background:var(--pur-bg);color:var(--purple)} .t-dan{background:var(--dan-bg);color:var(--danger)}
+.t-warn{background:var(--warn-bg);color:var(--warn)}
+
+/* ===== cards ===== */
+.card{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r-lg);
+  box-shadow:0 4px 24px rgba(0,0,0,.25)}
+.glass{background:rgba(31,36,48,0.6);border:1px solid var(--bd2);border-radius:var(--r-lg)}
+@supports(backdrop-filter:blur(1px)){.glass{backdrop-filter:blur(18px)}}
+
+/* emergency alert card */
+.emerg-card{display:flex;align-items:center;gap:13px;padding:15px;border-radius:var(--r-md);
+  background:linear-gradient(135deg,rgba(255,107,107,0.16),rgba(255,107,107,0.06));
+  border:1px solid var(--dan-br)}
+.emerg-card .ec-ic{width:44px;height:44px;border-radius:13px;background:rgba(255,107,107,0.18);
+  display:flex;align-items:center;justify-content:center;color:var(--danger);flex-shrink:0}
+.emerg-card .ec-t{flex:1;min-width:0}
+.emerg-card .ec-h{font-size:14px;font-weight:700;color:var(--text)}
+.emerg-card .ec-s{font-size:12px;color:var(--muted);margin-top:1px}
+.emerg-card .ec-go{color:var(--danger)}
+
+/* horizontal scroller */
+.hscroll{display:flex;gap:11px;overflow-x:auto;padding:2px 18px 2px;margin:0 -18px;scroll-snap-type:x proximity}
+.hscroll::-webkit-scrollbar{display:none}
+.mini{scroll-snap-align:start;flex-shrink:0;width:140px;padding:13px;border-radius:var(--r-md);
+  background:var(--surface);border:1px solid var(--bd)}
+.mini .mi{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;margin-bottom:10px}
+.mini .mn{font-size:13.5px;font-weight:700;line-height:1.25}
+.mini .ms{font-size:11px;color:var(--muted);margin-top:3px}
+
+/* remedy list card */
+.rcard{display:flex;align-items:center;gap:13px;padding:14px;border-radius:var(--r-md);
+  background:var(--surface);border:1px solid var(--bd);margin-bottom:11px;transition:transform .12s,border-color .15s}
+.rcard:active{transform:scale(.985)}
+.rcard .ric{width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.rcard .ric svg{width:24px;height:24px}
+.rcard .rb{flex:1;min-width:0}
+.rcard .rt{font-size:15px;font-weight:700;letter-spacing:-.2px}
+.rcard .rd{font-size:12px;color:var(--muted);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rcard .rmeta{display:flex;gap:10px;margin-top:7px}
+.rcard .rmeta span{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;color:var(--faint);font-weight:600}
+.rcard .rmeta svg{width:11px;height:11px}
+.bk{color:var(--faint);flex-shrink:0;padding:4px}
+.bk.on{color:var(--primary)}
+.pop-badge{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:var(--warn);
+  background:var(--warn-bg);border:1px solid var(--warn-br);border-radius:6px;padding:2px 6px}
+
+/* chips */
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 18px 2px;margin:0 -18px 4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;padding:8px 15px;border-radius:99px;background:var(--surface);border:1px solid var(--bd);
+  font-size:12.5px;font-weight:600;color:var(--muted);white-space:nowrap;transition:.15s}
+.chip.on{background:var(--pri-bg);border-color:var(--pri-br);color:var(--primary)}
+.chip:active{opacity:.7}
+
+/* category grid (codes) */
+.cgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.cg{display:flex;flex-direction:column;align-items:center;gap:9px;padding:16px 6px;border-radius:var(--r-md);
+  background:var(--surface);border:1px solid var(--bd);transition:transform .12s}
+.cg:active{transform:scale(.95)}
+.cg .cgi{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center}
+.cg .cgi svg{width:21px;height:21px}
+.cg .cgl{font-size:11px;font-weight:600;text-align:center;line-height:1.25;color:var(--text)}
+.cg .cgc{font-size:10px;color:var(--faint);font-weight:600}
+
+/* herb grid */
+.hgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
+.hc{padding:15px;border-radius:var(--r-md);background:var(--surface);border:1px solid var(--bd);transition:transform .12s}
+.hc:active{transform:scale(.97)}
+.hc .hci{width:48px;height:48px;border-radius:14px;background:var(--pri-bg);color:var(--primary);
+  display:flex;align-items:center;justify-content:center;margin-bottom:11px}
+.hc .hci svg{width:23px;height:23px}
+.hc .hcn{font-size:15px;font-weight:700;letter-spacing:-.2px}
+.hc .hce{font-size:11.5px;color:var(--muted);margin-top:1px}
+.hc .hcb{font-size:11px;color:var(--primary);margin-top:8px;font-weight:600;line-height:1.4}
+
+/* condition / code rows */
+.qrow{display:flex;align-items:center;gap:13px;padding:13px 14px;border-radius:var(--r-sm);
+  background:var(--surface);border:1px solid var(--bd);margin-bottom:9px;transition:transform .12s}
+.qrow:active{transform:scale(.985)}
+.qrow .qcd{font-family:'SF Mono',ui-monospace,Menlo,monospace;font-size:12.5px;font-weight:700;color:var(--primary);
+  background:var(--pri-bg);border:1px solid var(--pri-br);border-radius:8px;padding:5px 9px;white-space:nowrap;flex-shrink:0}
+.qrow .qtx{flex:1;min-width:0;font-size:13px;color:var(--text);line-height:1.4}
+.qrow.fl-emergency .qcd,.qrow.fl-animal .qcd{color:var(--danger);background:var(--dan-bg);border-color:var(--dan-br)}
+.qrow.fl-crisis .qcd{color:#f9a8d4;background:rgba(249,168,212,0.12);border-color:rgba(249,168,212,0.3)}
+.flagdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.fd-emergency,.fd-animal{background:var(--danger)} .fd-crisis{background:#f9a8d4} .fd-caution{background:var(--warn)}
+
+/* detail hero */
+.hero{position:relative;border-radius:var(--r-lg);overflow:hidden;padding:22px;margin-bottom:16px;
+  background:linear-gradient(135deg,rgba(82,215,165,0.20),rgba(107,168,255,0.10));border:1px solid var(--bd2)}
+.hero .hicon{width:64px;height:64px;border-radius:18px;background:rgba(255,255,255,0.10);
+  display:flex;align-items:center;justify-content:center;color:var(--text);margin-bottom:14px}
+.hero .hicon svg{width:30px;height:30px}
+.hero .hcat{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--primary)}
+.hero .hname{font-size:25px;font-weight:800;letter-spacing:-.5px;margin-top:3px;line-height:1.15}
+.hero .hsum{font-size:13px;color:var(--muted);margin-top:9px;line-height:1.55}
+.hstats{display:flex;gap:8px;margin-top:15px;flex-wrap:wrap}
+.hstat{display:inline-flex;align-items:center;gap:6px;background:rgba(0,0,0,0.22);border:1px solid var(--bd2);
+  border-radius:10px;padding:7px 11px;font-size:11.5px;font-weight:600}
+.hstat svg{width:13px;height:13px;color:var(--primary)}
+
+/* tabs */
+.tabs{display:flex;gap:4px;background:var(--surface);border:1px solid var(--bd);border-radius:13px;padding:4px;margin-bottom:16px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:1;white-space:nowrap;padding:9px 12px;border-radius:9px;font-size:12.5px;font-weight:700;color:var(--muted);transition:.15s}
+.tab.on{background:var(--elev);color:var(--primary)}
+
+.blk{margin-bottom:18px}
+.blk-h{font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.blk-h svg{width:15px;height:15px;color:var(--primary)}
+.p{font-size:13.5px;color:var(--muted);line-height:1.65}
+.p b{color:var(--text)}
+
+/* ingredient rows */
+.ing{display:flex;align-items:center;gap:12px;padding:12px;border-radius:var(--r-sm);background:var(--surface);border:1px solid var(--bd);margin-bottom:8px}
+.ing .inn{width:34px;height:34px;border-radius:10px;background:var(--pri-bg);color:var(--primary);
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0}
+.ing .inb{flex:1;min-width:0}
+.ing .innm{font-size:14px;font-weight:600}
+.ing .ineng{font-size:11.5px;color:var(--faint)}
+.ing .inq{font-size:12px;font-weight:700;color:var(--primary);white-space:nowrap}
+
+/* steps */
+.step{display:flex;gap:13px;padding:13px;border-radius:var(--r-sm);background:var(--surface);border:1px solid var(--bd);margin-bottom:9px}
+.step .sn{width:28px;height:28px;border-radius:50%;background:var(--pri-bg);color:var(--primary);
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0}
+.step .st{flex:1;font-size:13.5px;color:var(--text);line-height:1.5;padding-top:3px}
+
+/* dosage */
+.dgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px}
+.dcell{text-align:center;padding:13px 6px;border-radius:var(--r-sm);background:var(--surface);border:1px solid var(--bd)}
+.dcell.on{background:var(--pri-bg);border-color:var(--pri-br)}
+.dcell .di{color:var(--faint);margin-bottom:7px;display:flex;justify-content:center}
+.dcell.on .di{color:var(--primary)}
+.dcell .dl{font-size:10.5px;font-weight:600;color:var(--muted)}
+.dcell.on .dl{color:var(--primary)}
+
+/* warning box */
+.warnbox{display:flex;gap:10px;padding:13px;border-radius:var(--r-sm);margin-bottom:10px;
+  background:var(--warn-bg);border:1px solid var(--warn-br);color:var(--text);font-size:12.5px;line-height:1.55}
+.warnbox.dan{background:var(--dan-bg);border-color:var(--dan-br)}
+.warnbox svg{width:16px;height:16px;flex-shrink:0;margin-top:1px;color:var(--warn)}
+.warnbox.dan svg{color:var(--danger)}
+
+/* big primary button */
+.btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:52px;
+  background:var(--primary);color:#06140f;border-radius:15px;font-size:15px;font-weight:800;letter-spacing:-.2px;transition:transform .12s,opacity .15s}
+.btn:active{transform:scale(.98);opacity:.92}
+.btn.ghost{background:var(--surface);border:1px solid var(--bd2);color:var(--text)}
+.btn.dan{background:var(--danger);color:#fff}
+.btn svg{width:18px;height:18px}
+
+/* code detail */
+.codebig{text-align:center;padding:28px 18px;border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--bd2);margin-bottom:14px}
+.codebig .cbcond{font-size:14px;color:var(--muted);margin-bottom:14px;line-height:1.5}
+.codebig .cbnum{font-family:'SF Mono',ui-monospace,Menlo,monospace;font-size:38px;font-weight:800;
+  color:var(--primary);letter-spacing:1px;line-height:1.15;word-break:break-word}
+.codeacts{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:16px}
+.cact{display:flex;flex-direction:column;align-items:center;gap:7px;padding:13px 4px;border-radius:var(--r-sm);
+  background:var(--surface);border:1px solid var(--bd);font-size:10.5px;font-weight:600;color:var(--muted)}
+.cact:active{transform:scale(.95)} .cact svg{width:19px;height:19px}
+.cact.on{color:var(--primary)}
+
+/* fullscreen code */
+.fs{position:fixed;inset:0;z-index:140;background:#05080a;display:none;flex-direction:column;
+  align-items:center;justify-content:center;padding:24px;text-align:center}
+.fs.open{display:flex}
+.fs .fscond{font-size:16px;color:var(--muted);margin-bottom:22px;max-width:80%}
+.fs .fsnum{font-family:'SF Mono',ui-monospace,Menlo,monospace;font-size:13vw;font-weight:800;color:var(--primary);letter-spacing:2px;line-height:1.1;word-break:break-word}
+.fs .fshint{position:absolute;bottom:calc(34px + env(safe-area-inset-bottom,0px));font-size:12px;color:var(--faint)}
+.fs .fsx{position:absolute;top:calc(20px + env(safe-area-inset-top,0px));right:20px;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.08);display:flex;align-items:center;justify-content:center;color:#fff}
+
+/* search results */
+.sr-h{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--faint);margin:18px 2px 9px}
+.empty{text-align:center;color:var(--faint);font-size:13px;padding:50px 24px;line-height:1.6}
+.empty svg{width:36px;height:36px;color:var(--bd3);margin:0 auto 12px}
+
+/* list section title */
+.list-block{margin-top:6px}
+
+/* ===== bottom nav ===== */
+.bnav{position:fixed;left:0;right:0;bottom:0;z-index:60;display:flex;justify-content:center;
+  padding:0 14px calc(14px + env(safe-area-inset-bottom,0px));pointer-events:none}
+.bnav-pill{display:flex;gap:2px;width:100%;max-width:492px;pointer-events:all;
+  background:rgba(23,26,33,0.86);border:1px solid var(--bd2);border-radius:26px;padding:6px;
+  box-shadow:0 10px 40px rgba(0,0,0,.55)}
+@supports(backdrop-filter:blur(1px)){.bnav-pill{backdrop-filter:blur(22px)}}
+.bn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 2px;border-radius:18px;
+  font-size:9.5px;font-weight:700;color:var(--faint);transition:color .2s,background .2s}
+.bn svg{width:21px;height:21px;opacity:.6;transition:opacity .2s}
+.bn.on{color:var(--primary);background:var(--pri-bg)}
+.bn.on svg{opacity:1}
+
+/* emergency FAB */
+.fab{position:fixed;right:18px;bottom:calc(92px + env(safe-area-inset-bottom,0px));z-index:65;
+  display:flex;align-items:center;gap:8px;background:var(--danger);color:#fff;
+  border-radius:99px;padding:11px 16px;font-size:13px;font-weight:800;
+  box-shadow:0 8px 28px rgba(255,107,107,.4);transition:transform .12s}
+.fab:active{transform:scale(.94)} .fab svg{width:17px;height:17px}
+
+/* toast */
+.toast{position:fixed;left:50%;bottom:calc(150px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(14px);
+  z-index:130;background:var(--elev2);border:1px solid var(--bd3);border-radius:99px;padding:11px 18px;
+  font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;opacity:0;pointer-events:none;
+  transition:opacity .2s,transform .25s;box-shadow:0 12px 40px rgba(0,0,0,.6);max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast svg{width:15px;height:15px;color:var(--primary)} .toast .tc{font-family:ui-monospace,monospace;color:var(--primary)}
+
+/* gate */
+.gate{position:fixed;inset:0;z-index:200;background:rgba(5,8,10,.94);display:none;align-items:center;justify-content:center;
+  padding:20px;padding-top:calc(20px + env(safe-area-inset-top,0px));padding-bottom:calc(20px + env(safe-area-inset-bottom,0px));overflow-y:auto}
+@supports(backdrop-filter:blur(1px)){.gate{backdrop-filter:blur(8px)}}
+.gate.open{display:flex}
+.gate-card{background:var(--surface);border:1px solid var(--bd2);border-radius:24px;max-width:440px;width:100%;padding:26px 22px;margin:auto;box-shadow:0 30px 80px rgba(0,0,0,.7)}
+.gate-ic{width:54px;height:54px;border-radius:16px;margin:0 auto 16px;background:var(--dan-bg);border:1px solid var(--dan-br);display:flex;align-items:center;justify-content:center;color:var(--danger)}
+.gate-ic svg{width:27px;height:27px}
+.gate-h{font-size:20px;font-weight:800;text-align:center;letter-spacing:-.3px;margin-bottom:5px}
+.gate-sub{font-size:12px;color:var(--faint);text-align:center;text-transform:uppercase;letter-spacing:.6px;margin-bottom:17px}
+.gate-body{font-size:13.5px;color:var(--muted);line-height:1.7}
+.gate-body p{margin-bottom:11px} .gate-body b{color:var(--text)}
+.gate-list{list-style:none;margin:0 0 12px}
+.gate-list li{position:relative;padding:5px 0 5px 24px;font-size:13px;color:var(--muted);line-height:1.55}
+.gate-list li svg{position:absolute;left:0;top:7px;width:15px;height:15px;color:var(--danger)}
+.gate-emerg{background:var(--dan-bg);border:1px solid var(--dan-br);border-radius:12px;padding:12px;margin:2px 0 16px;font-size:12.5px;color:var(--muted);line-height:1.6}
+.gate-emerg b{color:var(--danger)}
+.gate-note{font-size:11px;color:var(--faint);text-align:center;margin-top:12px;line-height:1.5}
+
+.fade{animation:fade .22s ease}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.spacer{height:8px}
+.disc-mini{font-size:11px;color:var(--faint);line-height:1.55;text-align:center;padding:14px 10px}
+.disc-mini a{color:var(--primary)}
+</style>
+</head>
+<body>
+<div class="amb"><b class="a1"></b><b class="a2"></b><b class="a3"></b></div>
+<div class="app"><div id="view"></div></div>
+
+<!-- emergency FAB -->
+<button class="fab" id="fab" onclick="go('emergency')" aria-label="Emergency">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+  Emergency
+</button>
+
+<!-- bottom nav -->
+<nav class="bnav"><div class="bnav-pill" id="bnav"></div></nav>
+
+<!-- fullscreen code -->
+<div class="fs" id="fs" onclick="closeFs()">
+  <button class="fsx" aria-label="Close"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  <div class="fscond" id="fsCond"></div>
+  <div class="fsnum" id="fsNum"></div>
+  <div class="fshint">Tap anywhere to close</div>
+</div>
+
+<!-- toast -->
+<div class="toast" id="toast"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span id="toastMsg"></span></div>
+
+<!-- gate -->
+<div class="gate" id="gate" role="dialog" aria-modal="true">
+  <div class="gate-card">
+    <div class="gate-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l9.84 9.84 8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg></div>
+    <div class="gate-h">Please read first</div>
+    <div class="gate-sub">Hospital in a Box</div>
+    <div class="gate-body">
+      <p>This app collects <b>Ayurvedic remedies</b> and <b>&ldquo;Quantum / Divine Healing Codes.&rdquo;</b> They are shared as a <b>spiritual and wellness belief practice.</b></p>
+      <ul class="gate-list">
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>It is <b>not medicine</b> and has <b>no scientific proof</b>. It cannot diagnose, treat, cure or prevent any disease.</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><b>Never stop or replace</b> care or medication prescribed by a doctor.</li>
+        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Use it <b>alongside</b>, never instead of, professional medical or veterinary care.</li>
+      </ul>
+      <div class="gate-emerg"><b>In an emergency, do not wait.</b> Call your local emergency number (e.g. 911 / 112 / 999). Mental-health crisis: US &amp; Canada call or text <b>988</b>; UK Samaritans <b>116&nbsp;123</b>.</div>
+    </div>
+    <button class="btn" onclick="acceptGate()">I understand — continue</button>
+    <div class="gate-note">By continuing you agree this is for personal, spiritual use only and is not a substitute for professional care.</div>
+  </div>
+</div>
+
+<script>
+var DB = __DATA__;
+var REMEDIES=DB.REMEDIES, HERBS=DB.HERBS, COMPOUNDS=DB.COMPOUNDS, EMERG=DB.EMERG, QHC=DB.QHC;
+var HBYN={}; HERBS.forEach(function(h){HBYN[h.n]=h;});
+
+/* flatten codes */
+var CODES=[];
+QHC.forEach(function(s){s.groups.forEach(function(g){g.codes.forEach(function(c){
+  CODES.push({c:c.c,d:c.d,w:c.w,sec:s.id,secName:s.name,secLabel:s.label,accent:s.accent,icon:s.icon,sub:g.s});
+});});});
+
+/* ---------- icons ---------- */
+var IC={
+ search:'<circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>',
+ x:'<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
+ back:'<polyline points="15 18 9 12 15 6"/>',
+ home:'<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/>',
+ remedy:'<path d="M10 2v6.3L5.5 16A4 4 0 0 0 9 22h6a4 4 0 0 0 3.5-6L14 8.3V2"/><line x1="8" y1="2" x2="16" y2="2"/><line x1="7" y1="14" x2="17" y2="14"/>',
+ code:'<circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/>',
+ book:'<path d="M5 4a2 2 0 0 1 2-2h12v18H7a2 2 0 0 0-2 2z"/><path d="M5 16h14"/>',
+ more:'<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>',
+ alert:'<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+ leaf:'<path d="M11 20A7 7 0 0 1 4 13c0-6 7-9 16-9 0 9-3 16-9 16z"/><path d="M4 20c4-4 7-6 12-7"/>',
+ heart:'<path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/>',
+ clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+ gauge:'<path d="M12 21a9 9 0 1 1 9-9"/><path d="M12 12l4-4"/>',
+ flame:'<path d="M12 2c1 4 5 5 5 9a5 5 0 0 1-10 0c0-2 1-3 2-4 0 2 1 3 2 3 0-3-1-5 1-8z"/>',
+ copy:'<rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>',
+ share:'<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/>',
+ star:'<polygon points="12 2 15.1 8.6 22 9.3 17 14 18.3 21 12 17.5 5.7 21 7 14 2 9.3 8.9 8.6"/>',
+ expand:'<polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/>',
+ chev:'<polyline points="9 18 15 12 9 6"/>',
+ phone:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>',
+ info:'<circle cx="12" cy="12" r="9"/><line x1="12" y1="11" x2="12" y2="16"/><line x1="12" y1="8" x2="12.01" y2="8"/>',
+ sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4 12H2M22 12h-2M5 5l1.5 1.5M17.5 17.5 19 19M19 5l-1.5 1.5M6.5 17.5 5 19"/>',
+ droplet:'<path d="M12 2.5S5 10 5 14a7 7 0 0 0 14 0c0-4-7-11.5-7-11.5z"/>',
+ brain:'<path d="M9.5 2a2.5 2.5 0 0 1 5 0v7.5a2.5 2.5 0 0 1-5 0z"/><path d="M14.5 9.5a2.5 2.5 0 0 1 0 5H9.5a2.5 2.5 0 0 1 0-5"/><path d="M9.5 14.5a2.5 2.5 0 0 1 5 0V22h-5z"/>',
+ lungs:'<path d="M12 4v8"/><path d="M12 8c0-2-1-3-2.5-3S7 6 7 9c0 4-3 4-3 8a2 2 0 0 0 4 0c0-3 1-5 1-8"/><path d="M12 8c0-2 1-3 2.5-3S17 6 17 9c0 4 3 4 3 8a2 2 0 0 1-4 0c0-3-1-5-1-8"/>',
+ stomach:'<path d="M9 3v4a3 3 0 0 0 3 3h2a4 4 0 0 1 4 4 5 5 0 0 1-5 5H9a5 5 0 0 1-5-5"/>',
+ bone:'<path d="M17 3a2.5 2.5 0 0 1 1.8 4.3l-9.5 9.5A2.5 2.5 0 1 1 5 18.8l9.5-9.5A2.5 2.5 0 0 1 17 3z"/>',
+ venus:'<circle cx="12" cy="8" r="5"/><line x1="12" y1="13" x2="12" y2="22"/><line x1="9" y1="19" x2="15" y2="19"/>',
+ tooth:'<path d="M12 5.5c-2-2-5-2-6 .5-1 2.5 0 5 .5 8 .4 2.4.6 5 1.5 5s1-2 1.5-4 .8-2 1-2 .6 0 1 2 .6 4 1.5 4 1.1-2.6 1.5-5c.5-3 1.5-5.5.5-8-1-2.5-4-2.5-6-.5"/>',
+ shield:'<path d="M12 2 4 5v6c0 5 3.5 9 8 11 4.5-2 8-6 8-11V5z"/>',
+ sparkle:'<path d="M12 3v18M3 12h18"/><path d="M12 7l1.5 3.5L17 12l-3.5 1.5L12 17l-1.5-3.5L7 12l3.5-1.5z"/>',
+ eye:'<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/>',
+ ribbon:'<circle cx="12" cy="8" r="5"/><path d="M9 12l-3 9 6-3 6 3-3-9"/>',
+ bandage:'<rect x="2.5" y="8" width="19" height="8" rx="4" transform="rotate(-45 12 12)"/>',
+ users:'<circle cx="9" cy="8" r="3.5"/><path d="M3 20a6 6 0 0 1 12 0"/><path d="M16 5a3.5 3.5 0 0 1 0 7"/>',
+ paw:'<circle cx="6.5" cy="11" r="1.8"/><circle cx="17.5" cy="11" r="1.8"/><circle cx="9.5" cy="6.5" r="1.8"/><circle cx="14.5" cy="6.5" r="1.8"/><path d="M12 13c-2.4 0-4.5 1.7-4.5 3.8A2.2 2.2 0 0 0 9.7 19c.8 0 1.3-.4 2.3-.4s1.5.4 2.3.4a2.2 2.2 0 0 0 2.2-2.2C16.5 14.7 14.4 13 12 13z"/>',
+ tool:'<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.5 2.5-2.5-.7-.7-2.5z"/>',
+ mic:'<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/>',
+ kidney:'<path d="M8 3C5 3 3 6 3 10s2 7 5 7c2 0 3-1.5 3-4 0-3-2-3-2-5s2-2 2-3.5C11 3.8 10 3 8 3z"/><path d="M16 3c3 0 5 3 5 7s-2 7-5 7c-2 0-3-1.5-3-4 0-3 2-3 2-5s-2-2-2-3.5C13 3.8 14 3 16 3z"/>',
+ mars:'<circle cx="10" cy="14" r="5"/><line x1="14" y1="10" x2="20" y2="4"/><polyline points="15 4 20 4 20 9"/>'
+};
+function svg(k,cls){return '<svg '+(cls?'class="'+cls+'" ':'')+'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(IC[k]||IC.sparkle)+'</svg>';}
+
+var ACCVAR={mint:'var(--primary)',lavender:'var(--purple)',peach:'var(--warn)',sky:'var(--secondary)',blush:'var(--danger)',lemon:'var(--warn)',lilac:'var(--purple)',sage:'var(--primary)',rose:'#f9a8d4',cyan:'#67e8f9'};
+var ACCRGB={mint:'82,215,165',lavender:'167,139,250',peach:'255,184,77',sky:'107,168,255',blush:'255,107,107',lemon:'255,184,77',lilac:'167,139,250',sage:'82,215,165',rose:'249,168,212',cyan:'103,232,249'};
+
+/* remedy category -> icon + accent rgb */
+var RCAT={Respiratory:['lungs','107,168,255'],Digestive:['stomach','255,184,77'],Pain:['bandage','255,107,107'],
+ Skin:['sparkle','249,168,212'],Immunity:['shield','82,215,165'],'Heart & Metabolic':['heart','255,107,107'],
+ Reproductive:['venus','167,139,250'],Dental:['tooth','103,232,249'],Emergency:['alert','255,107,107']};
+
+/* safety notes for codes */
+var NOTES={
+ emergency:{t:'This describes a medical emergency. Call your local emergency number and get to a hospital now — a number is not a treatment.',k:'dan'},
+ animal:{t:'Per the source’s own disclaimer this code must never be used on animals. For children, continue all medication a doctor has prescribed.',k:'dan'},
+ crisis:{t:'If you or someone is in crisis, reach out now. US & Canada call/text 988; UK Samaritans 116 123, or your local emergency number.',k:'dan'},
+ caution:{t:'The source itself says to use this only alongside proper medical or veterinary care, and to confirm the diagnosis first.',k:'warn'}
+};
+
+/* ---------- storage: favorites + recents ---------- */
+function load(k,d){try{return JSON.parse(localStorage.getItem(k))||d;}catch(e){return d;}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(e){}}
+var FAV=load('hib_fav',{remedies:[],codes:[],herbs:[]});
+var RECENT=load('hib_recent',[]);
+function isFav(t,id){return FAV[t]&&FAV[t].indexOf(id)>=0;}
+function toggleFav(t,id){var a=FAV[t]||(FAV[t]=[]);var i=a.indexOf(id);if(i>=0){a.splice(i,1);}else{a.unshift(id);}save('hib_fav',FAV);}
+function addRecent(type,id,label,sub){
+  RECENT=RECENT.filter(function(r){return !(r.type===type&&r.id===id);});
+  RECENT.unshift({type:type,id:id,label:label,sub:sub});
+  if(RECENT.length>10)RECENT=RECENT.slice(0,10);
+  save('hib_recent',RECENT);
+}
+
+function esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function cap(s){return s?s.charAt(0).toUpperCase()+s.slice(1):s;}
+
+/* ---------- navigation ---------- */
+function go(path){location.hash='#/'+path;}
+function back(){if(history.length>1)history.back();else go('home');}
+var V=document.getElementById('view');
+
+function setView(html,scroll){V.innerHTML='<div class="fade">'+html+'</div>';if(scroll!==false)window.scrollTo(0,0);}
+
+/* ---------- header helpers ---------- */
+function topBack(title,sub){
+  return '<div class="top"><div class="top-row">'
+   +'<button class="t-back" onclick="back()" aria-label="Back">'+svg('back')+'</button>'
+   +'<div style="flex:1;min-width:0"><div class="t-title">'+esc(title)+'</div>'+(sub?'<div class="t-sub">'+esc(sub)+'</div>':'')+'</div>'
+   +'</div></div>';
+}
+
+/* ================= HOME ================= */
+function vHome(){
+  var hr=new Date().getHours();
+  var greet=hr<12?'Good morning':hr<18?'Good afternoon':'Good evening';
+  var h=''
+   +'<div class="top"><div class="top-row">'
+     +'<div style="flex:1"><div class="t-greet">'+greet+' '+svg('leaf','')+'</div><div class="t-h1">How can we help?</div></div>'
+     +'<div class="avatar">'+svg('heart')+'</div>'
+   +'</div></div>'
+   +'<div class="wrap">'
+   +'<div class="search" onclick="go(\'search\')"><span>'+svg('search')+'</span><input readonly placeholder="Search symptoms, remedies, codes…" inputmode="search"><span class="t-pri" style="display:flex;width:28px;height:28px;border-radius:9px;align-items:center;justify-content:center">'+svg('mic')+'</span></div>'
+   +'<div class="sect-h"><div class="h">Quick actions</div></div>'
+   +'<div class="qa">'
+     +qaItem('remedy','Find Remedy','t-pri','remedies')
+     +qaItem('code','Healing Codes','t-pur','codes')
+     +qaItem('leaf','Herb Library','t-sec','library')
+     +qaItem('alert','Emergency','t-dan','emergency')
+   +'</div>'
+   +'<div class="sect-h"><div class="h">If it\'s urgent</div></div>'
+   +'<a class="emerg-card" href="#/emergency"><div class="ec-ic">'+svg('alert')+'</div><div class="ec-t"><div class="ec-h">Emergency guidance</div><div class="ec-s">Chest pain, stroke, bleeding & more</div></div><div class="ec-go">'+svg('chev')+'</div></a>';
+
+  if(RECENT.length){
+    h+='<div class="sect-h"><div class="h">Recently viewed</div></div><div class="hscroll">';
+    RECENT.slice(0,8).forEach(function(r){h+=recentMini(r);});
+    h+='</div>';
+  }
+  h+='<div class="sect-h"><div class="h">Popular remedies</div><a class="more" href="#/remedies">See all</a></div>';
+  REMEDIES.filter(function(r){return r.popular;}).forEach(function(r){h+=remedyCard(r);});
+  h+='<div class="disc-mini">For wellness & spiritual use only — not medical advice. <a onclick="openGate()">Read the safety notice</a></div>';
+  h+='</div>';
+  setView(h);
+}
+function qaItem(icon,label,tone,path){
+  return '<button class="qa-item" onclick="go(\''+path+'\')"><div class="qa-ic '+tone+'">'+svg(icon)+'</div><div class="qa-lbl">'+label+'</div></button>';
+}
+function recentMini(r){
+  var ic='code',rgb='82,215,165';
+  if(r.type==='remedy'){var rm=RBYID(r.id);if(rm){var ci=RCAT[rm.cat]||['remedy','82,215,165'];ic=ci[0];rgb=ci[1];}}
+  else if(r.type==='herb'){ic='leaf';rgb='82,215,165';}
+  else if(r.type==='code'){ic='code';rgb='167,139,250';}
+  else if(r.type==='compound'){ic='leaf';rgb='107,168,255';}
+  var href=recentHref(r);
+  return '<a class="mini" href="'+href+'"><div class="mi" style="background:rgba('+rgb+',0.14);color:rgb('+rgb+')">'+svg(ic)+'</div><div class="mn">'+esc(r.label)+'</div><div class="ms">'+esc(r.sub||'')+'</div></a>';
+}
+function recentHref(r){
+  if(r.type==='remedy')return '#/remedy/'+r.id;
+  if(r.type==='herb')return '#/herb/'+r.id;
+  if(r.type==='code')return '#/code/'+r.id;
+  if(r.type==='compound')return '#/compound/'+r.id;
+  return '#/home';
+}
+
+/* ================= REMEDIES ================= */
+function RBYID(id){for(var i=0;i<REMEDIES.length;i++)if(REMEDIES[i].id===id)return REMEDIES[i];return null;}
+var remCat='All';
+function vRemedies(){
+  var cats=['All'];REMEDIES.forEach(function(r){if(cats.indexOf(r.cat)<0)cats.push(r.cat);});
+  var h=topBack('Remedies', REMEDIES.length+' Ayurvedic formulations')
+   +'<div class="wrap">'
+   +'<div class="search" onclick="go(\'search\')"><span>'+svg('search')+'</span><input readonly placeholder="Search remedies…"></div>'
+   +'<div style="height:14px"></div>'
+   +'<div class="chips" id="remChips">'+cats.map(function(c){return '<button class="chip'+(c===remCat?' on':'')+'" onclick="setRemCat(\''+esc(c)+'\')">'+esc(c)+'</button>';}).join('')+'</div>'
+   +'<div class="spacer"></div><div id="remList" class="list-block"></div></div>';
+  setView(h);
+  renderRemList();
+}
+function setRemCat(c){remCat=c;
+  var ch=document.querySelectorAll('#remChips .chip');
+  for(var i=0;i<ch.length;i++)ch[i].classList.toggle('on',ch[i].textContent===c);
+  renderRemList();
+}
+function renderRemList(){
+  var list=document.getElementById('remList');if(!list)return;
+  var arr=REMEDIES.filter(function(r){return remCat==='All'||r.cat===remCat;});
+  list.innerHTML=arr.map(remedyCard).join('')||'<div class="empty">Nothing here.</div>';
+}
+function remedyCard(r){
+  var ci=RCAT[r.cat]||['remedy','82,215,165'];
+  var fav=isFav('remedies',r.id);
+  return '<a class="rcard" href="#/remedy/'+r.id+'">'
+   +'<div class="ric" style="background:rgba('+ci[1]+',0.14);color:rgb('+ci[1]+')">'+svg(ci[0])+'</div>'
+   +'<div class="rb"><div class="rt">'+esc(r.name)+'</div><div class="rd">'+esc(r.cat)+(r.popular?' · Popular':'')+'</div>'
+   +'<div class="rmeta"><span>'+svg('clock')+esc(r.time)+'</span><span>'+svg('gauge')+esc(r.diff)+'</span></div></div>'
+   +'<button class="bk'+(fav?' on':'')+'" onclick="event.preventDefault();event.stopPropagation();favRem(this,\''+r.id+'\')" aria-label="Bookmark">'+svg('star')+'</button>'
+   +'</a>';
+}
+function favRem(btn,id){toggleFav('remedies',id);btn.classList.toggle('on',isFav('remedies',id));}
+
+/* ============== REMEDY DETAIL ============== */
+var remTab='Overview';
+function vRemedy(id){
+  var r=RBYID(id);if(!r){go('remedies');return;}
+  addRecent('remedy',id,r.name,r.cat);
+  remTab='Overview';
+  var ci=RCAT[r.cat]||['remedy','82,215,165'];
+  var fav=isFav('remedies',id);
+  var benefits={};r.ingredients.forEach(function(it){var hb=HBYN[it.n];if(hb&&hb.benefits)benefits[hb.benefits]=1;});
+  var h=topBack(r.name)
+   +'<div class="wrap">'
+   +'<div class="hero" style="background:linear-gradient(135deg,rgba('+ci[1]+',0.22),rgba('+ci[1]+',0.05))">'
+     +'<div class="hicon" style="color:rgb('+ci[1]+')">'+svg(ci[0])+'</div>'
+     +'<div class="hcat" style="color:rgb('+ci[1]+')">'+esc(r.cat)+'</div>'
+     +'<div class="hname">'+esc(r.name)+'</div><div class="hsum">'+esc(r.summary)+'</div>'
+     +'<div class="hstats"><span class="hstat">'+svg('clock')+esc(r.time)+'</span><span class="hstat">'+svg('gauge')+esc(r.diff)+'</span>'+(r.popular?'<span class="hstat">'+svg('flame')+'Popular</span>':'')+'</div>'
+   +'</div>'
+   +'<button class="icon-btn'+(fav?' on':'')+'" id="remFav" onclick="favRemDetail(\''+id+'\')" style="position:absolute"></button>'
+   +'<div class="tabs" id="remTabs">'
+     +['Overview','Ingredients','Preparation','Dosage','Warnings'].map(function(t){return '<button class="tab'+(t==='Overview'?' on':'')+'" onclick="setRemTab(\''+t+'\')">'+t+'</button>';}).join('')
+   +'</div><div id="remBody"></div></div>';
+  setView(h);
+  // place favorite button into hero top-right
+  var fb=document.getElementById('remFav');
+  if(fb){fb.innerHTML=svg('star');fb.style.position='absolute';fb.style.top='';
+    // move into hero corner
+    var hero=document.querySelector('.hero');hero.style.position='relative';
+    fb.style.position='absolute';fb.style.right='18px';fb.style.top='18px';hero.appendChild(fb);}
+  renderRemBody(r);
+}
+function favRemDetail(id){toggleFav('remedies',id);var b=document.getElementById('remFav');if(b)b.classList.toggle('on',isFav('remedies',id));}
+function setRemTab(t){remTab=t;var tb=document.querySelectorAll('#remTabs .tab');
+  for(var i=0;i<tb.length;i++)tb[i].classList.toggle('on',tb[i].textContent===t);
+  renderRemBody(RBYID(curRemId));}
+var curRemId=null;
+function renderRemBody(r){
+  curRemId=r.id;var h='';
+  if(remTab==='Overview'){
+    var bl={};r.ingredients.forEach(function(it){var hb=HBYN[it.n];if(hb&&hb.benefits)hb.benefits.split(', ').forEach(function(b){bl[b]=1;});});
+    h+='<div class="blk"><div class="blk-h">'+svg('info')+'Overview</div><div class="p">'+esc(r.summary)+'</div></div>';
+    h+='<div class="blk"><div class="blk-h">'+svg('heart')+'May support</div><div style="display:flex;flex-wrap:wrap;gap:7px">'+Object.keys(bl).map(function(b){return '<span class="hstat">'+esc(b)+'</span>';}).join('')+'</div></div>';
+    h+='<div class="blk"><div class="blk-h">'+svg('clock')+'How often</div><div class="p"><b>'+esc(r.freq)+'</b></div></div>';
+  } else if(remTab==='Ingredients'){
+    h+=r.ingredients.map(function(it){var hb=HBYN[it.n];
+      return '<a class="ing" href="#/herb/'+it.n+'"><div class="inn">'+it.n+'</div><div class="inb"><div class="innm">'+esc(it.herb)+'</div><div class="ineng">'+esc(hb?hb.en:'')+'</div></div><div class="inq">'+esc(it.qty)+'</div></a>';
+    }).join('');
+    if(r.extra)h+='<div class="warnbox"><span>'+svg('info')+'</span><div>Also: '+esc(r.extra)+'</div></div>';
+    h+='<div class="p" style="margin-top:6px">1 scoop = 1/8 tablespoon &asymp; 0.2 g. Use only the tiny scoop from your kit.</div>';
+  } else if(remTab==='Preparation'){
+    h+=r.steps.map(function(s,i){return '<div class="step"><div class="sn">'+(i+1)+'</div><div class="st">'+esc(s)+'</div></div>';}).join('');
+  } else if(remTab==='Dosage'){
+    h+='<div class="blk"><div class="blk-h">'+svg('clock')+'Frequency</div><div class="p"><b>'+esc(r.freq)+'</b></div></div>';
+    h+='<div class="blk-h">'+svg('sun')+'Suggested times</div>'+dosageGrid(r.freq);
+    h+='<div class="p">Spread the doses through the day. Take with the preparation method shown.</div>';
+  } else if(remTab==='Warnings'){
+    if(r.warn&&r.warn.length)h+=r.warn.map(function(w){return '<div class="warnbox dan"><span>'+svg('alert')+'</span><div>'+esc(w)+'</div></div>';}).join('');
+    h+='<div class="warnbox"><span>'+svg('info')+'</span><div>This is a traditional home remedy, <b>not medical advice</b>. Not for pregnancy, infants or serious conditions without professional guidance. Stop if any reaction occurs and seek care.</div></div>';
+  }
+  document.getElementById('remBody').innerHTML='<div class="fade">'+h+'</div>';
+}
+function dosageGrid(freq){
+  var n=4;var f=freq.toLowerCase();
+  var slots=['Morning','Afternoon','Evening','Night'];var ic=['sun','sun','sun','sun'];
+  var on=[1,1,1,1];
+  if(/once|1 time|after dinner/.test(f)){on=[0,0,/dinner/.test(f)?1:0,/dinner/.test(f)?0:1];if(!/dinner/.test(f))on=[1,0,0,0];}
+  else if(/twice|2 time/.test(f)){on=[1,0,1,0];}
+  else if(/thrice|3 time/.test(f)){on=[1,1,1,0];}
+  else if(/4-5|4 to 5|5 time/.test(f)){on=[1,1,1,1];}
+  else if(/3-4|3 to 4|4 time/.test(f)){on=[1,1,1,1];}
+  else if(/2-3/.test(f)){on=[1,1,1,0];}
+  else if(/as needed/.test(f)){on=[0,0,0,0];}
+  var h='<div class="dgrid">';
+  for(var i=0;i<4;i++)h+='<div class="dcell'+(on[i]?' on':'')+'"><div class="di">'+svg(i<3?'sun':'clock')+'</div><div class="dl">'+slots[i]+'</div></div>';
+  h+='</div>';return h;
+}
+
+/* ================= CODES ================= */
+function vCodes(){
+  var h=topBack('Healing Codes', CODES.length+' codes · '+QHC.length+' categories')
+   +'<div class="wrap">'
+   +'<div class="search" onclick="go(\'search\')"><span>'+svg('search')+'</span><input readonly placeholder="Search a condition or code…"></div>'
+   +'<div class="sect-h"><div class="h">Browse by category</div></div><div class="cgrid">';
+  QHC.forEach(function(s){
+    var n=0;s.groups.forEach(function(g){n+=g.codes.length;});
+    var rgb=ACCRGB[s.accent]||'167,139,250';
+    h+='<a class="cg" href="#/codes/'+s.id+'"><div class="cgi" style="background:rgba('+rgb+',0.14);color:rgb('+rgb+')">'+svg(s.icon)+'</div><div class="cgl">'+esc(s.label)+'</div><div class="cgc">'+n+'</div></a>';
+  });
+  h+='</div>';
+  var popular=['headache','anxiety','insomnia','stress','back pain','cold'];
+  h+='<div class="sect-h"><div class="h">Popular conditions</div></div>';
+  popular.forEach(function(term){
+    var idx=findCodeByDesc(term);
+    if(idx>=0)h+=codeRow(idx);
+  });
+  h+='<div class="disc-mini">An energy-healing belief practice with no scientific evidence. Never use in place of care. <a onclick="openGate()">Full notice</a></div>';
+  h+='</div>';
+  setView(h);
+}
+function findCodeByDesc(term){
+  for(var i=0;i<CODES.length;i++){if(CODES[i].d.toLowerCase().indexOf(term)>=0)return i;}return -1;
+}
+function vCodeCat(cat){
+  var s=null;for(var i=0;i<QHC.length;i++)if(QHC[i].id===cat)s=QHC[i];
+  if(!s){go('codes');return;}
+  var h=topBack(s.label,'Healing Codes')+'<div class="wrap">';
+  var lastSub=null;
+  CODES.forEach(function(c,idx){
+    if(c.sec!==cat)return;
+    if(c.sub!==lastSub){lastSub=c.sub;if(c.sub)h+='<div class="sr-h">'+esc(c.sub)+'</div>';}
+    h+=codeRow(idx);
+  });
+  h+='</div>';setView(h);
+}
+function codeRow(idx){
+  var c=CODES[idx];
+  return '<a class="qrow'+(c.w?' fl-'+c.w:'')+'" href="#/code/'+idx+'">'
+   +'<div class="qcd">'+esc(c.c)+'</div><div class="qtx">'+esc(cap(c.d))+'</div>'
+   +(c.w?'<span class="flagdot fd-'+c.w+'"></span>':'')+svg('chev')+'</a>';
+}
+function vCode(idx){
+  idx=parseInt(idx,10);var c=CODES[idx];if(!c){go('codes');return;}
+  addRecent('code',idx,cap(c.d).slice(0,40),c.secLabel);
+  var fav=isFav('codes',idx);
+  var h=topBack('Code','From '+c.secLabel)+'<div class="wrap">'
+   +'<div class="codebig"><div class="cbcond">'+esc(cap(c.d))+'</div><div class="cbnum">'+esc(c.c)+'</div></div>'
+   +'<div class="codeacts">'
+     +'<button class="cact" onclick="copyText(\''+c.c+'\')">'+svg('copy')+'Copy</button>'
+     +'<button class="cact" onclick="shareCode('+idx+')">'+svg('share')+'Share</button>'
+     +'<button class="cact'+(fav?' on':'')+'" id="codeFav" onclick="favCode('+idx+')">'+svg('star')+'Favorite</button>'
+     +'<button class="cact" onclick="openFs('+idx+')">'+svg('expand')+'Fullscreen</button>'
+   +'</div>';
+  if(c.w){var nn=NOTES[c.w];h+='<div class="warnbox '+(nn.k==='dan'?'dan':'')+'"><span>'+svg('alert')+'</span><div>'+nn.t+'</div></div>';}
+  h+='<div class="blk"><div class="blk-h">'+svg('info')+'How to use it</div><div class="p">The source describes three ways: <b>write</b> the code on or over the area, write it <b>in the air</b> above it, or <b>type it</b> on your phone and hold the screen over the spot. You can also set an intention and add it to food or water. Keep the spaces exactly as shown.</div></div>';
+  // related
+  var rel=[];for(var i=0;i<CODES.length&&rel.length<6;i++){if(i!==idx&&CODES[i].sec===c.sec)rel.push(i);}
+  if(rel.length){h+='<div class="sect-h"><div class="h">More in '+esc(c.secLabel)+'</div></div>';rel.forEach(function(i){h+=codeRow(i);});}
+  h+='</div>';setView(h);
+}
+function favCode(idx){toggleFav('codes',idx);var b=document.getElementById('codeFav');if(b)b.classList.toggle('on',isFav('codes',idx));}
+function openFs(idx){var c=CODES[idx];document.getElementById('fsCond').textContent=cap(c.d);document.getElementById('fsNum').textContent=c.c;document.getElementById('fs').classList.add('open');}
+function closeFs(){document.getElementById('fs').classList.remove('open');}
+function shareCode(idx){var c=CODES[idx];var txt=c.c+' — '+cap(c.d)+' (Hospital in a Box)';
+  if(navigator.share){navigator.share({text:txt}).catch(function(){});}else{copyText(c.c);}}
+
+/* ================= LIBRARY (herbs/compounds) ================= */
+var libTab='herbs';
+function vLibrary(){
+  var h=topBack('Library','Herbs & active compounds')+'<div class="wrap">'
+   +'<div class="search" onclick="go(\'search\')"><span>'+svg('search')+'</span><input readonly placeholder="Search herbs & compounds…"></div>'
+   +'<div style="height:14px"></div>'
+   +'<div class="tabs"><button class="tab'+(libTab==='herbs'?' on':'')+'" onclick="setLibTab(\'herbs\')">Herbs ('+HERBS.length+')</button><button class="tab'+(libTab==='compounds'?' on':'')+'" onclick="setLibTab(\'compounds\')">Compounds ('+COMPOUNDS.length+')</button></div>'
+   +'<div id="libBody"></div></div>';
+  setView(h);renderLib();
+}
+function setLibTab(t){libTab=t;var tb=document.querySelectorAll('.tabs .tab');renderLib();
+  var hs=document.querySelectorAll('.tabs .tab');for(var i=0;i<hs.length;i++)hs[i].classList.toggle('on',hs[i].textContent.toLowerCase().indexOf(t)===0);}
+function renderLib(){
+  var b=document.getElementById('libBody');if(!b)return;
+  if(libTab==='herbs'){
+    b.innerHTML='<div class="hgrid">'+HERBS.map(herbCard).join('')+'</div>';
+  } else {
+    b.innerHTML=COMPOUNDS.map(compoundRow).join('');
+  }
+}
+function herbCard(h){
+  return '<a class="hc" href="#/herb/'+h.n+'"><div class="hci">'+svg('leaf')+'</div><div class="hcn">'+esc(h.name)+'</div><div class="hce">'+esc(h.en)+'</div><div class="hcb">'+esc(h.benefits||'')+'</div></a>';
+}
+function compoundRow(c){
+  return '<a class="rcard" href="#/compound/'+c.n+'"><div class="ric" style="background:var(--sec-bg);color:var(--secondary)">'+svg('leaf')+'</div><div class="rb"><div class="rt">'+esc(c.compound.split(/[,(]/)[0])+'</div><div class="rd">from '+esc(c.herb)+'</div></div>'+svg('chev')+'</a>';
+}
+function vHerb(n){
+  n=parseInt(n,10);var h=HBYN[n];if(!h){go('library');return;}
+  addRecent('herb',n,h.name,h.en);
+  var fav=isFav('herbs',n);
+  var ht=topBack(h.name,h.en)+'<div class="wrap">'
+   +'<div class="hero"><div class="hicon" style="color:var(--primary)">'+svg('leaf')+'</div><div class="hcat">Herb #'+n+'</div><div class="hname">'+esc(h.name)+'</div><div class="hsum"><i>'+esc(h.bot)+'</i> · '+esc(h.en)+'</div>'
+   +'<div class="hstats"><span class="hstat">'+svg('leaf')+'Part: '+esc(h.part)+'</span></div></div>';
+  if(h.benefits)ht+='<div class="blk"><div class="blk-h">'+svg('heart')+'Traditionally used for</div><div style="display:flex;flex-wrap:wrap;gap:7px">'+h.benefits.split(', ').map(function(b){return '<span class="hstat">'+esc(b)+'</span>';}).join('')+'</div></div>';
+  if(h.compound)ht+='<div class="blk"><div class="blk-h">'+svg('info')+'Active compound</div><div class="p">'+esc(h.compound)+'</div></div>';
+  if(h.related&&h.related.length){ht+='<div class="sect-h"><div class="h">Used in remedies</div></div>';
+    h.related.forEach(function(rid){var r=RBYID(rid);if(r)ht+=remedyCard(r);});}
+  ht+='</div>';setView(ht);
+}
+function vCompound(n){
+  n=parseInt(n,10);var c=null;for(var i=0;i<COMPOUNDS.length;i++)if(COMPOUNDS[i].n===n)c=COMPOUNDS[i];
+  if(!c){go('library');return;}
+  addRecent('compound',n,c.compound.split(/[,(]/)[0],'from '+c.herb);
+  var hb=HBYN[n];
+  var h=topBack(c.compound.split(/[,(]/)[0],'Active compound')+'<div class="wrap">'
+   +'<div class="hero"><div class="hicon" style="color:var(--secondary)">'+svg('leaf')+'</div><div class="hcat" style="color:var(--secondary)">Compound</div><div class="hname">'+esc(c.compound)+'</div><div class="hsum">Found in '+esc(c.herb)+(hb?' ('+esc(hb.en)+')':'')+'</div></div>'
+   +'<div class="blk"><div class="blk-h">'+svg('heart')+'Associated with</div><div style="display:flex;flex-wrap:wrap;gap:7px">'+c.use.split(', ').map(function(b){return '<span class="hstat">'+esc(b)+'</span>';}).join('')+'</div></div>'
+   +'<div class="sect-h"><div class="h">Source herb</div></div>'+(hb?herbCardWide(hb):'')
+   +'</div>';
+  setView(h);
+}
+function herbCardWide(h){return '<a class="rcard" href="#/herb/'+h.n+'"><div class="ric" style="background:var(--pri-bg);color:var(--primary)">'+svg('leaf')+'</div><div class="rb"><div class="rt">'+esc(h.name)+'</div><div class="rd"><i>'+esc(h.bot)+'</i></div></div>'+svg('chev')+'</a>';}
+
+/* ================= EMERGENCY ================= */
+function vEmergency(){
+  var h=topBack('Emergency','Act fast — call for help first')+'<div class="wrap">'
+   +'<a class="emerg-card" href="tel:112" style="margin-bottom:14px"><div class="ec-ic">'+svg('phone')+'</div><div class="ec-t"><div class="ec-h">Call emergency services</div><div class="ec-s">Do this first in any emergency</div></div><div class="ec-go">'+svg('chev')+'</div></a>';
+  EMERG.forEach(function(e){
+    h+='<a class="rcard" href="#/emergency/'+e.id+'"><div class="ric" style="background:var(--dan-bg);color:var(--danger)">'+svg(e.icon)+'</div><div class="rb"><div class="rt">'+esc(e.name)+'</div><div class="rd">Immediate first-aid steps</div></div>'+svg('chev')+'</a>';
+  });
+  h+='<div class="disc-mini">These are general first-aid reminders, not a substitute for training or professional help. When in doubt, call your local emergency number.</div></div>';
+  setView(h);
+}
+function vEmergencyDetail(id){
+  var e=null;for(var i=0;i<EMERG.length;i++)if(EMERG[i].id===id)e=EMERG[i];
+  if(!e){go('emergency');return;}
+  var h=topBack(e.name,'Emergency')+'<div class="wrap">'
+   +'<a class="btn dan" href="tel:112" style="margin-bottom:16px">'+svg('phone')+'Call emergency services now</a>'
+   +'<div class="blk-h">'+svg('alert')+'Immediate actions</div>';
+  h+=e.steps.map(function(s,i){return '<div class="step"><div class="sn" style="background:var(--dan-bg);color:var(--danger)">'+(i+1)+'</div><div class="st">'+esc(s)+'</div></div>';}).join('');
+  if(e.code){
+    var idx=-1;for(var k=0;k<CODES.length;k++)if(CODES[k].c===e.code){idx=k;break;}
+    h+='<div class="blk" style="margin-top:14px"><div class="blk-h">'+svg('code')+'Source\'s healing code</div>'
+     +'<div class="warnbox"><span>'+svg('info')+'</span><div>'+esc(e.codedesc)+'. This is <b>not a treatment</b> — use it only while help is on the way.</div></div>'
+     +(idx>=0?codeRow(idx):'')+'</div>';
+  }
+  h+='</div>';setView(h);
+}
+
+/* ================= MORE ================= */
+function vMore(){
+  var favN=(FAV.remedies.length+FAV.codes.length+FAV.herbs.length);
+  var h=topBack('More','Hospital in a Box')+'<div class="wrap">'
+   +moreRow('star','Favorites',favN+' saved','favorites')
+   +moreRow('info','How to use & water codes','Methods, intention, water codes','howto')
+   +moreRow('alert','Safety notice','Important — please read','gate')
+   +moreRow('book','About','What this app is','about')
+   +'<div class="disc-mini">Hospital in a Box · '+REMEDIES.length+' remedies · '+CODES.length+' code listings · '+HERBS.length+' herbs.<br>Works offline. For wellness & spiritual use only — not medical advice.</div></div>';
+  setView(h);
+}
+function moreRow(icon,title,sub,path){
+  var on=path==='gate'?'onclick="openGate()"':'href="#/'+path+'"';
+  return '<a class="rcard" '+on+'><div class="ric" style="background:var(--elev);color:var(--muted)">'+svg(icon)+'</div><div class="rb"><div class="rt">'+title+'</div><div class="rd">'+sub+'</div></div>'+svg('chev')+'</a>';
+}
+function vFavorites(){
+  var h=topBack('Favorites')+'<div class="wrap">';
+  var any=false;
+  if(FAV.remedies.length){any=true;h+='<div class="sr-h">Remedies</div>';FAV.remedies.forEach(function(id){var r=RBYID(id);if(r)h+=remedyCard(r);});}
+  if(FAV.codes.length){any=true;h+='<div class="sr-h">Codes</div>';FAV.codes.forEach(function(idx){if(CODES[idx])h+=codeRow(idx);});}
+  if(FAV.herbs.length){any=true;h+='<div class="sr-h">Herbs</div><div class="hgrid">';FAV.herbs.forEach(function(n){if(HBYN[n])h+=herbCard(HBYN[n]);});h+='</div>';}
+  if(!any)h+='<div class="empty">'+svg('star')+'No favorites yet. Tap the star on any remedy, code or herb to save it here.</div>';
+  h+='</div>';setView(h);
+}
+function vHowto(){
+  var h=topBack('How to use')+'<div class="wrap">'
+   +'<div class="blk"><div class="blk-h">'+svg('remedy')+'Ayurvedic remedies</div><div class="p">1 scoop = 1/8 tablespoon &asymp; 0.2 g. Use only the tiny scoop from your kit. Most remedies: boil in ~100 ml water for 5 minutes and sip warm. Follow the per-remedy dosage.</div></div>'
+   +'<div class="blk"><div class="blk-h">'+svg('code')+'Healing codes</div><div class="p">The source describes three ways to apply a code, plus setting an intention:</div></div>'
+   +'<div class="step"><div class="sn">1</div><div class="st">Write it on or over the area of discomfort (or on a sticker).</div></div>'
+   +'<div class="step"><div class="sn">2</div><div class="st">Write it in the air above the area.</div></div>'
+   +'<div class="step"><div class="sn">3</div><div class="st">Type it on your phone and hold the screen over the spot. (Tap any code to copy it.)</div></div>'
+   +'<div class="step"><div class="sn">+</div><div class="st">Set an intention, then add the code to food or water before consuming.</div></div>'
+   +'<div class="sect-h"><div class="h">The Water Codes</div></div>'
+   +'<div class="p" style="margin-bottom:10px">Write these on opposite sides of a water container to &ldquo;create a vortex&rdquo; in the water:</div>'
+   +'<div class="qrow" onclick="copyText(\'99 77 654\')"><div class="qcd">99 77 654</div><div class="qtx">One side of the container</div>'+svg('copy')+'</div>'
+   +'<div class="qrow" onclick="copyText(\'44 66 111\')"><div class="qcd">44 66 111</div><div class="qtx">The opposite side</div>'+svg('copy')+'</div>'
+   +'<div class="qrow" onclick="copyText(\'88 44 578\')"><div class="qcd">88 44 578</div><div class="qtx">Increases the nutrition of food &mdash; &ldquo;if you only use one, use this&rdquo;</div>'+svg('copy')+'</div>'
+   +'<div class="warnbox"><span>'+svg('info')+'</span><div>Keep every space exactly as shown — the source says the codes will not work without them.</div></div>'
+   +'</div>';setView(h);
+}
+function vAbout(){
+  var h=topBack('About')+'<div class="wrap">'
+   +'<div class="hero"><div class="hicon" style="color:var(--primary)">'+svg('heart')+'</div><div class="hname">Hospital in a Box</div><div class="hsum">Ancient wisdom, modern interface. Ayurvedic remedies and the complete Quantum Healing Codes, in one offline app.</div></div>'
+   +'<div class="blk"><div class="p">This app brings together <b>'+REMEDIES.length+' Ayurvedic remedies</b>, a <b>'+HERBS.length+'-herb library</b> with active compounds, and the complete set of <b>718 unique healing codes ('+CODES.length+' listings)</b> across '+QHC.length+' categories, transcribed verbatim from the source compiled by Marc Gamma, Isabel Henn and &ldquo;Reiki Doc.&rdquo;</div></div>'
+   +'<div class="warnbox dan"><span>'+svg('alert')+'</span><div><b>Not medical advice.</b> A spiritual / wellness belief practice with no scientific proof. Never replace professional care. In an emergency call your local emergency number.</div></div>'
+   +'<button class="btn ghost" onclick="openGate()" style="margin-top:6px">'+svg('info')+'Re-read the full safety notice</button>'
+   +'</div>';setView(h);
+}
+
+/* ================= SEARCH ================= */
+function vSearch(){
+  var h='<div class="top"><div class="top-row">'
+   +'<button class="t-back" onclick="back()">'+svg('back')+'</button>'
+   +'<div class="search" style="flex:1"><span>'+svg('search')+'</span><input id="sInput" placeholder="Search anything…" inputmode="search" autocomplete="off"><button class="clr" id="sClr" onclick="clearS()">'+svg('x')+'</button></div>'
+   +'</div></div><div class="wrap"><div id="sRes"></div></div>';
+  setView(h);
+  var inp=document.getElementById('sInput');
+  inp.addEventListener('input',function(){doSearch(inp.value);});
+  setTimeout(function(){inp.focus();},120);
+  doSearch('');
+}
+function clearS(){var i=document.getElementById('sInput');if(i){i.value='';i.focus();}doSearch('');}
+var sT=null;
+function doSearch(q){
+  document.getElementById('sClr').className=q?'clr v':'clr';
+  if(sT)clearTimeout(sT);
+  sT=setTimeout(function(){runSearch(q.toLowerCase().trim());},120);
+}
+function runSearch(q){
+  var box=document.getElementById('sRes');if(!box)return;
+  if(!q){
+    box.innerHTML='<div class="sr-h">Try searching</div><div style="display:flex;flex-wrap:wrap;gap:8px">'
+     +['Headache','Cold','Stress','Insomnia','Anxiety','Diabetes','Fever','Cough'].map(function(t){return '<button class="chip" onclick="seed(\''+t+'\')">'+t+'</button>';}).join('')+'</div>';
+    return;
+  }
+  var h='';
+  var rem=REMEDIES.filter(function(r){return (r.name+' '+r.summary+' '+r.cat+' '+r.ingredients.map(function(i){return i.herb;}).join(' ')).toLowerCase().indexOf(q)>=0;});
+  if(rem.length){h+='<div class="sr-h">Remedies ('+rem.length+')</div>'+rem.slice(0,8).map(remedyCard).join('');}
+  var hb=HERBS.filter(function(x){return (x.name+' '+x.en+' '+x.bot+' '+(x.benefits||'')).toLowerCase().indexOf(q)>=0;});
+  if(hb.length){h+='<div class="sr-h">Herbs ('+hb.length+')</div><div class="hgrid">'+hb.slice(0,8).map(herbCard).join('')+'</div>';}
+  var ci=[];for(var i=0;i<CODES.length&&ci.length<40;i++){if((CODES[i].c+' '+CODES[i].d).toLowerCase().indexOf(q)>=0)ci.push(i);}
+  if(ci.length){h+='<div class="sr-h">Healing codes ('+ci.length+(ci.length>=40?'+':'')+')</div>'+ci.map(codeRow).join('');}
+  var cp=COMPOUNDS.filter(function(c){return (c.compound+' '+c.herb+' '+c.use).toLowerCase().indexOf(q)>=0;});
+  if(cp.length){h+='<div class="sr-h">Compounds ('+cp.length+')</div>'+cp.slice(0,6).map(compoundRow).join('');}
+  if(!h)h='<div class="empty">'+svg('search')+'No results for &ldquo;'+esc(q)+'&rdquo;.</div>';
+  box.innerHTML=h;
+}
+function seed(t){var i=document.getElementById('sInput');if(i){i.value=t;i.focus();}doSearch(t);}
+
+/* ================= copy / toast ================= */
+function copyText(t){
+  var done=function(){toast('Copied','tc',t);};
+  if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(done,function(){fb(t);done();});
+  else{fb(t);done();}
+}
+function fb(t){try{var a=document.createElement('textarea');a.value=t;a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();document.execCommand('copy');document.body.removeChild(a);}catch(e){}}
+var toastT=null;
+function toast(label,cls,val){
+  var t=document.getElementById('toast'),m=document.getElementById('toastMsg');
+  m.innerHTML=label+(val?' <span class="tc">'+esc(val)+'</span>':'');
+  t.classList.add('show');if(toastT)clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('show');},1600);
+}
+
+/* ================= gate ================= */
+function openGate(){document.getElementById('gate').classList.add('open');}
+function acceptGate(){save('hib_ack',1);document.getElementById('gate').classList.remove('open');}
+
+/* ================= bottom nav ================= */
+var TABS=[['home','Home','home'],['remedies','Remedies','remedy'],['codes','Codes','code'],['library','Library','leaf'],['more','More','more']];
+function buildNav(){
+  document.getElementById('bnav').innerHTML=TABS.map(function(t){
+    return '<a class="bn" id="bn-'+t[0]+'" href="#/'+t[0]+'">'+svg(t[2])+t[1]+'</a>';
+  }).join('');
+}
+function setNav(active){
+  TABS.forEach(function(t){var el=document.getElementById('bn-'+t[0]);if(el)el.classList.toggle('on',t[0]===active);});
+}
+
+/* ================= router ================= */
+function router(){
+  closeFs();
+  var hash=location.hash.replace(/^#\/?/,'');var parts=hash.split('/');
+  var r=parts[0]||'home';
+  var navmap={home:'home',remedies:'remedies',remedy:'remedies',codes:'codes',code:'codes',library:'library',herb:'library',compound:'library',compounds:'library',more:'more',favorites:'more',about:'more',howto:'more',search:'home',emergency:'more'};
+  setNav(navmap[r]||'home');
+  if(r==='home'||r==='')vHome();
+  else if(r==='remedies')vRemedies();
+  else if(r==='remedy')vRemedy(parts[1]);
+  else if(r==='codes'&&parts[1])vCodeCat(parts[1]);
+  else if(r==='codes')vCodes();
+  else if(r==='code')vCode(parts[1]);
+  else if(r==='library')vLibrary();
+  else if(r==='herb')vHerb(parts[1]);
+  else if(r==='compounds')vLibrary();
+  else if(r==='compound')vCompound(parts[1]);
+  else if(r==='emergency'&&parts[1])vEmergencyDetail(parts[1]);
+  else if(r==='emergency')vEmergency();
+  else if(r==='more')vMore();
+  else if(r==='favorites')vFavorites();
+  else if(r==='howto')vHowto();
+  else if(r==='about')vAbout();
+  else if(r==='search')vSearch();
+  else vHome();
+}
+window.addEventListener('hashchange',router);
+buildNav();
+if(!location.hash)location.hash='#/home';
+router();
+if(!load('hib_ack',0))openGate();
+if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}
+</script>
+</body>
+</html>
