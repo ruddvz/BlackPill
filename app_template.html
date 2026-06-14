@@ -494,8 +494,21 @@ var IC={
  kidney:'<path d="M8 3C5 3 3 6 3 10s2 7 5 7c2 0 3-1.5 3-4 0-3-2-3-2-5s2-2 2-3.5C11 3.8 10 3 8 3z"/><path d="M16 3c3 0 5 3 5 7s-2 7-5 7c-2 0-3-1.5-3-4 0-3 2-3 2-5s-2-2-2-3.5C13 3.8 14 3 16 3z"/>',
  mars:'<circle cx="10" cy="14" r="5"/><line x1="14" y1="10" x2="20" y2="4"/><polyline points="15 4 20 4 20 9"/>',
  flask:'<path d="M9 2h6M10 2v6.5L4.8 17a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 8.5V2"/><line x1="7.5" y1="14" x2="16.5" y2="14"/>',
- moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/>'
+ moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/>',
+ root:'<path d="M4 12a4 4 0 0 1 4-4c2.2 0 3 1.6 4 1.6S15.8 8 18 8a4 4 0 0 1 0 8c-2.2 0-3-1.6-4-1.6S9 16 7 16a4 4 0 0 1-3-4z"/><path d="M8 10.2v3.6M14 10.2v3.6"/>',
+ bulb:'<path d="M12 2.5c-.8 1.5-.8 2.6 0 4M12 6.5C8.7 6.5 7 9.4 7 13a5 5 0 0 0 10 0c0-3.6-1.7-6.5-5-6.5z"/><path d="M12 7v10M9.4 8C8.3 10.4 8.3 14 9.4 16.4M14.6 8c1.1 2.4 1.1 6 0 8.4"/>',
+ seeds:'<ellipse cx="8.5" cy="9" rx="1.9" ry="2.7" transform="rotate(-22 8.5 9)"/><ellipse cx="15" cy="10" rx="1.9" ry="2.7" transform="rotate(22 15 10)"/><ellipse cx="11.5" cy="15.5" rx="1.9" ry="2.7" transform="rotate(-8 11.5 15.5)"/>',
+ bark:'<rect x="4.5" y="4" width="6" height="16" rx="3"/><rect x="13.5" y="4" width="6" height="16" rx="3"/><path d="M7.5 4v16"/>',
+ bud:'<path d="M12 22V10.5"/><circle cx="12" cy="6.5" r="3.6"/><path d="M9.3 4.4 12 6.7l2.7-2.3"/>',
+ pod:'<path d="M12 2.8c-3.4 0-5 4.2-5 9.2s1.6 9.2 5 9.2 5-4.2 5-9.2-1.6-9.2-5-9.2z"/><path d="M12 2.8v18.4"/>',
+ citrus:'<circle cx="12" cy="12" r="8.5"/><path d="M12 3.5v17M3.5 12h17M6 6l12 12M18 6 6 18"/>',
+ fruit:'<circle cx="12" cy="13.5" r="6.6"/><path d="M12 6.9V3.4M12 3.4c1.7 0 2.7-1.1 2.9-2.4"/>',
+ flower:'<circle cx="12" cy="12" r="2.4"/><path d="M12 9.6a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8zM12 19.2a2.4 2.4 0 1 1 0-4.8 2.4 2.4 0 0 1 0 4.8zM9.6 12a2.4 2.4 0 1 1-4.8 0 2.4 2.4 0 0 1 4.8 0zM19.2 12a2.4 2.4 0 1 1-4.8 0 2.4 2.4 0 0 1 4.8 0z"/>',
+ chili:'<path d="M6.5 5.5c4.2.4 7.4 3.6 8.4 8 .7 3-1.5 5.4-4.4 4.7C6 17 3.6 12.4 4 6.4"/><path d="M6.5 5.5C6.5 3.6 8 2.6 9.6 2.9"/>',
+ sprout:'<path d="M12 21v-8M12 13c-3 0-5-2-5-5 3 0 5 2 5 5zM12 13c0-3 2-5 5-5 0 3-2 5-5 5z"/>'
 };
+var HICON={1:'fruit',2:'fruit',3:'fruit',4:'droplet',5:'root',6:'sprout',7:'seeds',8:'seeds',9:'seeds',10:'root',11:'seeds',12:'bark',13:'bud',14:'seeds',15:'leaf',16:'bark',17:'bulb',18:'leaf',19:'citrus',20:'root',21:'seeds',22:'pod',23:'flower',24:'root',25:'leaf',26:'droplet',27:'flower',28:'chili'};
+function herbIcon(n){return HICON[n]||'leaf';}
 var EICON={burns:'flame',poisoning:'flask'};
 function svg(k,cls){return '<svg '+(cls?'class="'+cls+'" ':'')+'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(IC[k]||IC.sparkle)+'</svg>';}
 
@@ -588,7 +601,7 @@ function qaItem(icon,label,tone,path){
 function recentMini(r){
   var ic='code',key='purple';
   if(r.type==='remedy'){var rm=RBYID(r.id);if(rm){var ci=RCAT[rm.cat]||['remedy','mint'];ic=ci[0];key=ci[1];}}
-  else if(r.type==='herb'){ic='leaf';key=PAL[(parseInt(r.id,10)||0)%PAL.length];}
+  else if(r.type==='herb'){var hn=parseInt(r.id,10)||0;ic=herbIcon(hn);key=PAL[hn%PAL.length];}
   else if(r.type==='code'){ic='code';key='purple';}
   else if(r.type==='compound'){ic='leaf';key='sky';}
   var media=acDot('mi',key,ic);
@@ -775,23 +788,22 @@ function renderLib(){
     b.innerHTML=COMPOUNDS.map(compoundRow).join('');
   }
 }
-var PAL=['82,215,165','107,168,255','167,139,250','255,184,77','249,168,212','103,232,249'];
 function herbCard(h){
   var key=PAL[h.n%PAL.length];
-  return '<a class="hc ac-'+key+'" href="#/herb/'+h.n+'">'+acDot('hci',key,'leaf')
+  return '<a class="hc ac-'+key+'" href="#/herb/'+h.n+'">'+acDot('hci',key,herbIcon(h.n))
    +'<div class="hcn">'+esc(h.name)+'</div><div class="hce">'+esc(h.en)+' · '+esc(h.part)+'</div>'
    +'<div class="hcb" style="color:rgb(var(--ac))">'+esc(h.benefits||'')+'</div></a>';
 }
 function compoundRow(c){
-  return '<a class="rcard" href="#/compound/'+c.n+'"><div class="ric" style="background:var(--sec-bg);color:var(--secondary)">'+svg('leaf')+'</div><div class="rb"><div class="rt">'+esc(c.compound.split(/[,(]/)[0])+'</div><div class="rd">from '+esc(c.herb)+'</div></div>'+svg('chev')+'</a>';
+  return '<a class="rcard" href="#/compound/'+c.n+'">'+acDot('ric',PAL[c.n%PAL.length],herbIcon(c.n))+'<div class="rb"><div class="rt">'+esc(c.compound.split(/[,(]/)[0])+'</div><div class="rd">from '+esc(c.herb)+'</div></div>'+svg('chev')+'</a>';
 }
 function vHerb(n){
   n=parseInt(n,10);var h=HBYN[n];if(!h){go('library');return;}
   addRecent('herb',n,h.name,h.en);
   var fav=isFav('herbs',n);
   var ht=topBack(h.name,h.en)+'<div class="wrap">'
-   +'<div class="hero"><div class="hicon" style="color:var(--primary)">'+svg('leaf')+'</div><div class="hcat">Herb #'+n+'</div><div class="hname">'+esc(h.name)+'</div><div class="hsum"><i>'+esc(h.bot)+'</i> · '+esc(h.en)+'</div>'
-   +'<div class="hstats"><span class="hstat">'+svg('leaf')+'Part: '+esc(h.part)+'</span></div></div>';
+   +'<div class="hero ac-'+PAL[n%PAL.length]+'"><div class="hicon" style="color:rgb(var(--ac))">'+svg(herbIcon(n))+'</div><div class="hcat" style="color:rgb(var(--ac))">Herb #'+n+'</div><div class="hname">'+esc(h.name)+'</div><div class="hsum"><i>'+esc(h.bot)+'</i> · '+esc(h.en)+'</div>'
+   +'<div class="hstats"><span class="hstat">'+svg(herbIcon(n))+'Part: '+esc(h.part)+'</span></div></div>';
   if(h.benefits)ht+='<div class="blk"><div class="blk-h">'+svg('heart')+'Traditionally used for</div><div style="display:flex;flex-wrap:wrap;gap:7px">'+h.benefits.split(', ').map(function(b){return '<span class="hstat">'+esc(b)+'</span>';}).join('')+'</div></div>';
   if(h.compound)ht+='<div class="blk"><div class="blk-h">'+svg('info')+'Active compound</div><div class="p">'+esc(h.compound)+'</div></div>';
   if(h.related&&h.related.length){ht+='<div class="sect-h"><div class="h">Used in remedies</div></div>';
@@ -804,13 +816,13 @@ function vCompound(n){
   addRecent('compound',n,c.compound.split(/[,(]/)[0],'from '+c.herb);
   var hb=HBYN[n];
   var h=topBack(c.compound.split(/[,(]/)[0],'Active compound')+'<div class="wrap">'
-   +'<div class="hero"><div class="hicon" style="color:var(--secondary)">'+svg('leaf')+'</div><div class="hcat" style="color:var(--secondary)">Compound</div><div class="hname">'+esc(c.compound)+'</div><div class="hsum">Found in '+esc(c.herb)+(hb?' ('+esc(hb.en)+')':'')+'</div></div>'
+   +'<div class="hero ac-'+PAL[n%PAL.length]+'"><div class="hicon" style="color:rgb(var(--ac))">'+svg(herbIcon(n))+'</div><div class="hcat" style="color:rgb(var(--ac))">Compound</div><div class="hname">'+esc(c.compound)+'</div><div class="hsum">Found in '+esc(c.herb)+(hb?' ('+esc(hb.en)+')':'')+'</div></div>'
    +'<div class="blk"><div class="blk-h">'+svg('heart')+'Associated with</div><div style="display:flex;flex-wrap:wrap;gap:7px">'+c.use.split(', ').map(function(b){return '<span class="hstat">'+esc(b)+'</span>';}).join('')+'</div></div>'
    +'<div class="sect-h"><div class="h">Source herb</div></div>'+(hb?herbCardWide(hb):'')
    +'</div>';
   setView(h);
 }
-function herbCardWide(h){return '<a class="rcard" href="#/herb/'+h.n+'"><div class="ric" style="background:var(--pri-bg);color:var(--primary)">'+svg('leaf')+'</div><div class="rb"><div class="rt">'+esc(h.name)+'</div><div class="rd"><i>'+esc(h.bot)+'</i></div></div>'+svg('chev')+'</a>';}
+function herbCardWide(h){return '<a class="rcard" href="#/herb/'+h.n+'">'+acDot('ric',PAL[h.n%PAL.length],herbIcon(h.n))+'<div class="rb"><div class="rt">'+esc(h.name)+'</div><div class="rd"><i>'+esc(h.bot)+'</i></div></div>'+svg('chev')+'</a>';}
 
 /* ================= EMERGENCY ================= */
 function vEmergency(){
