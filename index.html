@@ -325,6 +325,8 @@ svg{display:block;flex-shrink:0;width:18px;height:18px}
 .spacer{height:8px}
 .disc-mini{font-size:11px;color:var(--faint);line-height:1.55;text-align:center;padding:14px 10px}
 .disc-mini a{color:var(--primary)}
+.chant{margin-top:9px;background:var(--pri-bg);border:1px solid var(--pri-br);border-radius:12px;padding:11px 13px;color:var(--primary);font-weight:700;font-size:13.5px;line-height:1.65;text-align:center;letter-spacing:.2px}
+.chant small{display:block;color:var(--muted);font-weight:500;font-size:10.5px;text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
 
 /* ===== accent token classes (themeable) ===== */
 .ac-mint{--ac:82,215,165}.ac-sky{--ac:107,168,255}.ac-purple{--ac:167,139,250}
@@ -495,7 +497,7 @@ var IC={
  mars:'<circle cx="10" cy="14" r="5"/><line x1="14" y1="10" x2="20" y2="4"/><polyline points="15 4 20 4 20 9"/>',
  flask:'<path d="M9 2h6M10 2v6.5L4.8 17a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 8.5V2"/><line x1="7.5" y1="14" x2="16.5" y2="14"/>',
  moon:'<path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/>',
- root:'<path d="M4 12a4 4 0 0 1 4-4c2.2 0 3 1.6 4 1.6S15.8 8 18 8a4 4 0 0 1 0 8c-2.2 0-3-1.6-4-1.6S9 16 7 16a4 4 0 0 1-3-4z"/><path d="M8 10.2v3.6M14 10.2v3.6"/>',
+ root:'<path d="M8.7 3.4c1.5-.6 3.1.5 3.3 2.2 1.2-.8 3-.3 3.6 1 .5 1.3-.1 2.7-1.3 3.3 1.4.7 1.9 2.4 1 3.7-.7 1.1-2 1.5-3.3 1.1l-.3 1.9c-.3 1.9-2.1 3.1-4 2.8-1.9-.3-3.1-2.1-2.8-4-1.4-.4-2.3-1.9-2-3.4.3-1.4 1.6-2.3 3-2.1-.7-1.4-.3-3 1.1-3.8z"/><path d="M9.4 20.4 8.6 22M12.3 20.8l.4 1.7M14.5 19.4l1.3 1.5"/>',
  bulb:'<path d="M12 2.5c-.8 1.5-.8 2.6 0 4M12 6.5C8.7 6.5 7 9.4 7 13a5 5 0 0 0 10 0c0-3.6-1.7-6.5-5-6.5z"/><path d="M12 7v10M9.4 8C8.3 10.4 8.3 14 9.4 16.4M14.6 8c1.1 2.4 1.1 6 0 8.4"/>',
  seeds:'<ellipse cx="8.5" cy="9" rx="1.9" ry="2.7" transform="rotate(-22 8.5 9)"/><ellipse cx="15" cy="10" rx="1.9" ry="2.7" transform="rotate(22 15 10)"/><ellipse cx="11.5" cy="15.5" rx="1.9" ry="2.7" transform="rotate(-8 11.5 15.5)"/>',
  bark:'<rect x="4.5" y="4" width="6" height="16" rx="3"/><rect x="13.5" y="4" width="6" height="16" rx="3"/><path d="M7.5 4v16"/>',
@@ -547,6 +549,8 @@ function addRecent(type,id,label,sub){
 
 function esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function cap(s){return s?s.charAt(0).toUpperCase()+s.slice(1):s;}
+var DW=['zero','one','two','three','four','five','six','seven','eight','nine'];
+function chantText(code){return String(code).trim().split(/\s+/).map(function(g){return g.split('').map(function(d){return /[0-9]/.test(d)?DW[+d]:d;}).join(' ');}).join('  ·  ');}
 
 /* ---------- navigation ---------- */
 function go(path){location.hash='#/'+path;}
@@ -756,7 +760,13 @@ function vCode(idx){
      +'<button class="cact" onclick="openFs('+idx+')">'+svg('expand')+'Fullscreen</button>'
    +'</div>';
   if(c.w){var nn=NOTES[c.w];h+='<div class="warnbox '+(nn.k==='dan'?'dan':'')+'"><span>'+svg('alert')+'</span><div>'+nn.t+'</div></div>';}
-  h+='<div class="dsec"><div class="dsec-h">'+svg('info')+'How to use</div><div class="p">The source describes three ways: <b>write</b> the code on or over the area, write it <b>in the air</b> above it, or <b>type it</b> on your phone and hold the screen over the spot. You can also set an intention and add it to food or water. Keep the spaces exactly as shown.</div></div>';
+  h+='<div class="dsec"><div class="dsec-h">'+svg('info')+'How to use</div>'
+   +'<div class="p"><b>1 · Chant it.</b> Say it slowly, like a sentence &mdash; pause at every space, never run the whole number together:</div>'
+   +'<div class="chant"><small>'+esc(c.c)+'</small>'+esc(chantText(c.c))+'</div>'
+   +'<div class="step" style="margin-top:11px"><div class="sn">2</div><div class="st"><b>Write it</b> on or over the area of discomfort (or on a sticker placed there).</div></div>'
+   +'<div class="step"><div class="sn">3</div><div class="st"><b>Write it in the air</b> just above the affected area.</div></div>'
+   +'<div class="step"><div class="sn">4</div><div class="st"><b>Type it</b> &mdash; tap the code above to copy &mdash; then hold your phone over the spot.</div></div>'
+   +'<div class="p" style="margin-top:10px;color:var(--faint);font-size:12px">You can also set an intention and add the code to your food or water before consuming it. Keep the spaces exactly as shown.</div></div>';
   // related
   var rel=[];for(var i=0;i<CODES.length&&rel.length<6;i++){if(i!==idx&&CODES[i].sec===c.sec)rel.push(i);}
   if(rel.length){h+='<div class="sect-h"><div class="h">More in '+esc(c.secLabel)+'</div></div>';rel.forEach(function(i){h+=codeRow(i);});}
@@ -815,11 +825,17 @@ function vCompound(n){
   if(!c){go('library');return;}
   addRecent('compound',n,c.compound.split(/[,(]/)[0],'from '+c.herb);
   var hb=HBYN[n];
-  var h=topBack(c.compound.split(/[,(]/)[0],'Active compound')+'<div class="wrap">'
+  var nm=c.compound.split(/[,(]/)[0].trim();
+  var h=topBack(nm,'Active compound')+'<div class="wrap">'
    +'<div class="hero ac-'+PAL[n%PAL.length]+'"><div class="hicon" style="color:rgb(var(--ac))">'+svg(herbIcon(n))+'</div><div class="hcat" style="color:rgb(var(--ac))">Compound</div><div class="hname">'+esc(c.compound)+'</div><div class="hsum">Found in '+esc(c.herb)+(hb?' ('+esc(hb.en)+')':'')+'</div></div>'
-   +'<div class="dsec"><div class="dsec-h">'+svg('heart')+'Associated with</div><div style="display:flex;flex-wrap:wrap;gap:7px">'+c.use.split(', ').map(function(b){return '<span class="hstat">'+esc(b)+'</span>';}).join('')+'</div></div>'
-   +'<div class="sect-h"><div class="h">Source herb</div></div>'+(hb?herbCardWide(hb):'')
-   +'</div>';
+   +'<div class="dsec"><div class="dsec-h">'+svg('info')+'About</div><div class="p"><b>'+esc(nm)+'</b> is a naturally occurring active compound found in <b>'+esc(c.herb)+'</b>'+(hb?' ('+esc(hb.en)+', <i>'+esc(hb.bot)+'</i>)':'')+'. In traditional Ayurvedic use it is associated with '+esc(c.use.toLowerCase())+'.</div></div>'
+   +'<div class="dsec"><div class="dsec-h">'+svg('heart')+'Traditionally supports</div><div style="display:flex;flex-wrap:wrap;gap:7px">'+c.use.split(', ').map(function(b){return '<span class="hstat">'+esc(b)+'</span>';}).join('')+'</div></div>'
+   +'<div class="sect-h"><div class="h">Source herb</div></div>'+(hb?herbCardWide(hb):'');
+  if(hb&&hb.related&&hb.related.length){
+    h+='<div class="sect-h"><div class="h">Remedies using '+esc(hb.name)+'</div></div>';
+    hb.related.forEach(function(rid){var r=RBYID(rid);if(r)h+=remedyCard(r);});
+  }
+  h+='<div class="disc-mini">Compound information is simplified for general interest and is not medical advice.</div></div>';
   setView(h);
 }
 function herbCardWide(h){return '<a class="rcard" href="#/herb/'+h.n+'">'+acDot('ric',PAL[h.n%PAL.length],herbIcon(h.n))+'<div class="rb"><div class="rt">'+esc(h.name)+'</div><div class="rd"><i>'+esc(h.bot)+'</i></div></div>'+svg('chev')+'</a>';}
@@ -882,11 +898,12 @@ function vFavorites(){
 function vHowto(){
   var h=topBack('How to use')+'<div class="wrap">'
    +'<div class="dsec"><div class="dsec-h">'+svg('remedy')+'Ayurvedic remedies</div><div class="p">1 scoop = 1/8 tablespoon &asymp; 0.2 g. Use only the tiny scoop from your kit. Most remedies: boil in ~100 ml water for 5 minutes and sip warm. Follow the per-remedy dosage.</div></div>'
-   +'<div class="dsec"><div class="dsec-h">'+svg('code')+'Healing codes</div><div class="p">The source describes three ways to apply a code, plus setting an intention:</div></div>'
-   +'<div class="step"><div class="sn">1</div><div class="st">Write it on or over the area of discomfort (or on a sticker).</div></div>'
-   +'<div class="step"><div class="sn">2</div><div class="st">Write it in the air above the area.</div></div>'
-   +'<div class="step"><div class="sn">3</div><div class="st">Type it on your phone and hold the screen over the spot. (Tap any code to copy it.)</div></div>'
-   +'<div class="step"><div class="sn">+</div><div class="st">Set an intention, then add the code to food or water before consuming.</div></div>'
+   +'<div class="dsec"><div class="dsec-h">'+svg('code')+'Healing codes — 4 ways</div>'
+   +'<div class="step"><div class="sn">1</div><div class="st"><b>Chant it.</b> Say the code slowly, like a sentence &mdash; pause at every space and never run it all together. For example <b>23 74 555</b> is spoken:<div class="chant"><small>23 74 555</small>two three  ·  seven four  ·  five five five</div></div></div>'
+   +'<div class="step"><div class="sn">2</div><div class="st"><b>Write it</b> on or over the area of discomfort (or on a sticker placed there).</div></div>'
+   +'<div class="step"><div class="sn">3</div><div class="st"><b>Write it in the air</b> just above the affected area.</div></div>'
+   +'<div class="step"><div class="sn">4</div><div class="st"><b>Type it</b> on your phone and hold the screen over the spot. (Tap any code to copy it.)</div></div>'
+   +'<div class="step"><div class="sn">+</div><div class="st">Set an intention, then add the code to your food or water before consuming.</div></div>'
    +'<div class="sect-h"><div class="h">The Water Codes</div></div>'
    +'<div class="p" style="margin-bottom:10px">Write these on opposite sides of a water container to &ldquo;create a vortex&rdquo; in the water:</div>'
    +'<div class="qrow" onclick="copyText(\'99 77 654\')"><div class="qcd">99 77 654</div><div class="qtx">One side of the container</div>'+svg('copy')+'</div>'
