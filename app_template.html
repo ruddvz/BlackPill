@@ -756,7 +756,7 @@ function vCode(idx){
      +'<button class="cact" onclick="openFs('+idx+')">'+svg('expand')+'Fullscreen</button>'
    +'</div>';
   if(c.w){var nn=NOTES[c.w];h+='<div class="warnbox '+(nn.k==='dan'?'dan':'')+'"><span>'+svg('alert')+'</span><div>'+nn.t+'</div></div>';}
-  h+='<div class="blk"><div class="blk-h">'+svg('info')+'How to use it</div><div class="p">The source describes three ways: <b>write</b> the code on or over the area, write it <b>in the air</b> above it, or <b>type it</b> on your phone and hold the screen over the spot. You can also set an intention and add it to food or water. Keep the spaces exactly as shown.</div></div>';
+  h+='<div class="dsec"><div class="dsec-h">'+svg('info')+'How to use</div><div class="p">The source describes three ways: <b>write</b> the code on or over the area, write it <b>in the air</b> above it, or <b>type it</b> on your phone and hold the screen over the spot. You can also set an intention and add it to food or water. Keep the spaces exactly as shown.</div></div>';
   // related
   var rel=[];for(var i=0;i<CODES.length&&rel.length<6;i++){if(i!==idx&&CODES[i].sec===c.sec)rel.push(i);}
   if(rel.length){h+='<div class="sect-h"><div class="h">More in '+esc(c.secLabel)+'</div></div>';rel.forEach(function(i){h+=codeRow(i);});}
@@ -804,8 +804,8 @@ function vHerb(n){
   var ht=topBack(h.name,h.en)+'<div class="wrap">'
    +'<div class="hero ac-'+PAL[n%PAL.length]+'"><div class="hicon" style="color:rgb(var(--ac))">'+svg(herbIcon(n))+'</div><div class="hcat" style="color:rgb(var(--ac))">Herb #'+n+'</div><div class="hname">'+esc(h.name)+'</div><div class="hsum"><i>'+esc(h.bot)+'</i> · '+esc(h.en)+'</div>'
    +'<div class="hstats"><span class="hstat">'+svg(herbIcon(n))+'Part: '+esc(h.part)+'</span></div></div>';
-  if(h.benefits)ht+='<div class="blk"><div class="blk-h">'+svg('heart')+'Traditionally used for</div><div style="display:flex;flex-wrap:wrap;gap:7px">'+h.benefits.split(', ').map(function(b){return '<span class="hstat">'+esc(b)+'</span>';}).join('')+'</div></div>';
-  if(h.compound)ht+='<div class="blk"><div class="blk-h">'+svg('info')+'Active compound</div><div class="p">'+esc(h.compound)+'</div></div>';
+  if(h.benefits)ht+='<div class="dsec"><div class="dsec-h">'+svg('heart')+'Traditionally used for</div><div style="display:flex;flex-wrap:wrap;gap:7px">'+h.benefits.split(', ').map(function(b){return '<span class="hstat">'+esc(b)+'</span>';}).join('')+'</div></div>';
+  if(h.compound)ht+='<div class="dsec"><div class="dsec-h">'+svg('info')+'Active compound</div><div class="p">'+esc(h.compound)+'</div></div>';
   if(h.related&&h.related.length){ht+='<div class="sect-h"><div class="h">Used in remedies</div></div>';
     h.related.forEach(function(rid){var r=RBYID(rid);if(r)ht+=remedyCard(r);});}
   ht+='</div>';setView(ht);
@@ -817,7 +817,7 @@ function vCompound(n){
   var hb=HBYN[n];
   var h=topBack(c.compound.split(/[,(]/)[0],'Active compound')+'<div class="wrap">'
    +'<div class="hero ac-'+PAL[n%PAL.length]+'"><div class="hicon" style="color:rgb(var(--ac))">'+svg(herbIcon(n))+'</div><div class="hcat" style="color:rgb(var(--ac))">Compound</div><div class="hname">'+esc(c.compound)+'</div><div class="hsum">Found in '+esc(c.herb)+(hb?' ('+esc(hb.en)+')':'')+'</div></div>'
-   +'<div class="blk"><div class="blk-h">'+svg('heart')+'Associated with</div><div style="display:flex;flex-wrap:wrap;gap:7px">'+c.use.split(', ').map(function(b){return '<span class="hstat">'+esc(b)+'</span>';}).join('')+'</div></div>'
+   +'<div class="dsec"><div class="dsec-h">'+svg('heart')+'Associated with</div><div style="display:flex;flex-wrap:wrap;gap:7px">'+c.use.split(', ').map(function(b){return '<span class="hstat">'+esc(b)+'</span>';}).join('')+'</div></div>'
    +'<div class="sect-h"><div class="h">Source herb</div></div>'+(hb?herbCardWide(hb):'')
    +'</div>';
   setView(h);
@@ -839,11 +839,11 @@ function vEmergencyDetail(id){
   if(!e){go('emergency');return;}
   var h=topBack(e.name,'Emergency')+'<div class="wrap">'
    +'<a class="btn dan" href="tel:112" style="margin-bottom:16px">'+svg('phone')+'Call emergency services now</a>'
-   +'<div class="blk-h">'+svg('alert')+'Immediate actions</div>';
+   +'<div class="dsec-h">'+svg('alert')+'Immediate actions</div>';
   h+=e.steps.map(function(s,i){return '<div class="step"><div class="sn" style="background:var(--dan-bg);color:var(--danger)">'+(i+1)+'</div><div class="st">'+esc(s)+'</div></div>';}).join('');
   if(e.code){
     var idx=-1;for(var k=0;k<CODES.length;k++)if(CODES[k].c===e.code){idx=k;break;}
-    h+='<div class="blk" style="margin-top:14px"><div class="blk-h">'+svg('code')+'Source\'s healing code</div>'
+    h+='<div class="dsec" style="margin-top:14px"><div class="dsec-h">'+svg('code')+'Source\'s healing code</div>'
      +'<div class="warnbox"><span>'+svg('info')+'</span><div>'+esc(e.codedesc)+'. This is <b>not a treatment</b> — use it only while help is on the way.</div></div>'
      +(idx>=0?codeRow(idx):'')+'</div>';
   }
@@ -881,8 +881,8 @@ function vFavorites(){
 }
 function vHowto(){
   var h=topBack('How to use')+'<div class="wrap">'
-   +'<div class="blk"><div class="blk-h">'+svg('remedy')+'Ayurvedic remedies</div><div class="p">1 scoop = 1/8 tablespoon &asymp; 0.2 g. Use only the tiny scoop from your kit. Most remedies: boil in ~100 ml water for 5 minutes and sip warm. Follow the per-remedy dosage.</div></div>'
-   +'<div class="blk"><div class="blk-h">'+svg('code')+'Healing codes</div><div class="p">The source describes three ways to apply a code, plus setting an intention:</div></div>'
+   +'<div class="dsec"><div class="dsec-h">'+svg('remedy')+'Ayurvedic remedies</div><div class="p">1 scoop = 1/8 tablespoon &asymp; 0.2 g. Use only the tiny scoop from your kit. Most remedies: boil in ~100 ml water for 5 minutes and sip warm. Follow the per-remedy dosage.</div></div>'
+   +'<div class="dsec"><div class="dsec-h">'+svg('code')+'Healing codes</div><div class="p">The source describes three ways to apply a code, plus setting an intention:</div></div>'
    +'<div class="step"><div class="sn">1</div><div class="st">Write it on or over the area of discomfort (or on a sticker).</div></div>'
    +'<div class="step"><div class="sn">2</div><div class="st">Write it in the air above the area.</div></div>'
    +'<div class="step"><div class="sn">3</div><div class="st">Type it on your phone and hold the screen over the spot. (Tap any code to copy it.)</div></div>'
@@ -898,7 +898,7 @@ function vHowto(){
 function vAbout(){
   var h=topBack('About')+'<div class="wrap">'
    +'<div class="hero"><div class="hicon" style="color:var(--primary)">'+svg('heart')+'</div><div class="hname">Hospital in a Box</div><div class="hsum">Ancient wisdom, modern interface. Ayurvedic remedies and the complete Quantum Healing Codes, in one offline app.</div></div>'
-   +'<div class="blk"><div class="p">This app brings together <b>'+REMEDIES.length+' Ayurvedic remedies</b>, a <b>'+HERBS.length+'-herb library</b> with active compounds, and the complete set of <b>718 unique healing codes ('+CODES.length+' listings)</b> across '+QHC.length+' categories, transcribed verbatim from the source compiled by Marc Gamma, Isabel Henn and &ldquo;Reiki Doc.&rdquo;</div></div>'
+   +'<div class="dsec"><div class="p">This app brings together <b>'+REMEDIES.length+' Ayurvedic remedies</b>, a <b>'+HERBS.length+'-herb library</b> with active compounds, and the complete set of <b>718 unique healing codes ('+CODES.length+' listings)</b> across '+QHC.length+' categories, transcribed verbatim from the source compiled by Marc Gamma, Isabel Henn and &ldquo;Reiki Doc.&rdquo;</div></div>'
    +'<div class="warnbox dan"><span>'+svg('alert')+'</span><div><b>Not medical advice.</b> A spiritual / wellness belief practice with no scientific proof. Never replace professional care. In an emergency call your local emergency number.</div></div>'
    +'<button class="btn ghost" onclick="openGate()" style="margin-top:6px">'+svg('info')+'Re-read the full safety notice</button>'
    +'</div>';setView(h);
