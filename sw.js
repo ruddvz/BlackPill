@@ -1,5 +1,5 @@
 /* Hospital in a Box - offline service worker (stale-while-revalidate) */
-var CACHE = 'hib-v3';
+var CACHE = 'hib-v4';
 var ASSETS = ['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-maskable-512.png','./icon-180.png'];
 
 self.addEventListener('install', function(e){
@@ -15,12 +15,14 @@ self.addEventListener('fetch', function(e){
   e.respondWith(
     caches.match(e.request).then(function(cached){
       var net = fetch(e.request).then(function(resp){
-        if(resp && resp.status===200 && resp.type==='basic'){
+        if(resp && resp.status===200 && (resp.type==='basic' || resp.type==='cors')){
           var cp = resp.clone();
           caches.open(CACHE).then(function(c){ c.put(e.request, cp); });
         }
         return resp;
-      }).catch(function(){ return cached; });
+      }).catch(function(){
+        return cached || (e.request.mode==='navigate' ? caches.match('./index.html') : undefined);
+      });
       return cached || net;
     })
   );

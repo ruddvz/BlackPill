@@ -2,11 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Ayurvedic remedies and the complete Quantum / Divine Healing Codes reference. Works offline. Not medical advice.">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Hospital">
 <meta name="theme-color" content="#0F1115">
-<meta name="color-scheme" content="dark">
+<meta name="color-scheme" content="dark light">
 <title>Hospital in a Box</title>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
@@ -41,6 +44,16 @@ a{color:inherit;text-decoration:none;-webkit-tap-highlight-color:transparent}
 svg{display:block;flex-shrink:0;width:18px;height:18px}
 .t-greet svg{width:14px;height:14px;display:inline-block}
 ::-webkit-scrollbar{width:0;height:0}
+
+/* accessible keyboard focus (mouse/touch unaffected) */
+:focus{outline:none}
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px;border-radius:6px}
+.search:focus-within{border-color:var(--pri-br);box-shadow:0 0 0 3px var(--pri-bg)}
+
+/* respect reduced-motion preference */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+}
 
 /* ambient glow */
 .amb{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
@@ -83,6 +96,10 @@ svg{display:block;flex-shrink:0;width:18px;height:18px}
 .search input::placeholder{color:var(--faint)}
 .search .clr{display:none;color:var(--muted)}
 .search .clr.v{display:block}
+.micbtn{display:flex;width:30px;height:30px;border-radius:9px;align-items:center;justify-content:center;flex-shrink:0}
+.micbtn svg{width:16px;height:16px}
+.micbtn.listening{animation:micpulse 1s ease-in-out infinite}
+@keyframes micpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.86)}}
 
 /* ===== quick actions ===== */
 .qa{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
@@ -172,6 +189,7 @@ svg{display:block;flex-shrink:0;width:18px;height:18px}
 .qrow{display:flex;align-items:center;gap:13px;padding:13px 14px;border-radius:var(--r-sm);
   background:var(--surface);border:1px solid var(--bd);margin-bottom:9px;transition:transform .12s}
 .qrow:active{transform:scale(.985)}
+button.qrow{width:100%;text-align:left}
 .qrow .qcd{font-family:'SF Mono',ui-monospace,Menlo,monospace;font-size:12.5px;font-weight:700;color:var(--primary);
   background:var(--pri-bg);border:1px solid var(--pri-br);border-radius:8px;padding:5px 9px;white-space:nowrap;flex-shrink:0}
 .qrow .qtx{flex:1;min-width:0;font-size:13px;color:var(--text);line-height:1.4}
@@ -577,7 +595,7 @@ function vHome(){
      +'<button class="avatar" onclick="go(\'more\')" aria-label="Menu">'+svg('heart')+'</button>'
    +'</div></div>'
    +'<div class="wrap">'
-   +'<div class="search" onclick="go(\'search\')"><span>'+svg('search')+'</span><input readonly placeholder="Search symptoms, remedies, codes…" inputmode="search"><span class="t-pri" style="display:flex;width:28px;height:28px;border-radius:9px;align-items:center;justify-content:center">'+svg('mic')+'</span></div>'
+   +'<div class="search" onclick="go(\'search\')"><span>'+svg('search')+'</span><input readonly placeholder="Search symptoms, remedies, codes…" inputmode="search" aria-label="Search"><button class="micbtn t-pri" onclick="event.stopPropagation();voiceHome()" aria-label="Voice search">'+svg('mic')+'</button></div>'
    +'<div class="sect-h"><div class="h">Quick actions</div></div>'
    +'<div class="qa">'
      +qaItem('remedy','Find Remedy','t-pri','remedies')
@@ -650,10 +668,10 @@ function remedyCard(r){
    +acDot('ric',ci[1],ci[0])
    +'<div class="rb"><div class="rt">'+esc(r.name)+'</div><div class="rd">'+esc(r.cat)+(r.popular?' · Popular':'')+'</div>'
    +'<div class="rmeta"><span>'+svg('clock')+esc(r.time)+'</span><span>'+svg('gauge')+esc(r.diff)+'</span></div></div>'
-   +'<button class="bk'+(fav?' on':'')+'" onclick="event.preventDefault();event.stopPropagation();favRem(this,\''+r.id+'\')" aria-label="Bookmark">'+svg('star')+'</button>'
+   +'<button class="bk'+(fav?' on':'')+'" aria-pressed="'+fav+'" onclick="event.preventDefault();event.stopPropagation();favRem(this,\''+r.id+'\')" aria-label="Save to Favorites">'+svg('star')+'</button>'
    +'</a>';
 }
-function favRem(btn,id){toggleFav('remedies',id);btn.classList.toggle('on',isFav('remedies',id));}
+function favRem(btn,id){toggleFav('remedies',id);var on=isFav('remedies',id);btn.classList.toggle('on',on);btn.setAttribute('aria-pressed',on);toast(on?'Saved to Favorites':'Removed');}
 
 /* ============== REMEDY DETAIL ============== */
 function vRemedy(id){
@@ -679,7 +697,7 @@ function vRemedy(id){
   h+='<div class="dsec"><div class="dsec-h">'+svg('remedy')+'Preparation</div>'
    +r.steps.map(function(s,i){return '<div class="step"><div class="sn">'+(i+1)+'</div><div class="st">'+esc(s)+'</div></div>';}).join('')+'</div>';
   // dosage
-  h+='<div class="dsec"><div class="dsec-h">'+svg('clock')+'Dosage</div><div class="p" style="margin-bottom:10px">Take <b>'+esc(r.freq.toLowerCase().indexOf('time')>=0||r.freq.toLowerCase().indexOf('twice')>=0||r.freq.toLowerCase().indexOf('thrice')>=0?r.freq.toLowerCase():r.freq)+'</b>.</div>'+dosageChips(r.freq)+'</div>';
+  h+='<div class="dsec"><div class="dsec-h">'+svg('clock')+'Dosage</div><div class="p" style="margin-bottom:10px">Take <b>'+esc(r.freq.toLowerCase())+'</b>.</div>'+dosageChips(r.freq)+'</div>';
   // safety
   h+='<div class="dsec"><div class="dsec-h">'+svg('alert')+'Safety</div>';
   (r.warn||[]).forEach(function(w){h+='<div class="warnbox dan"><span>'+svg('alert')+'</span><div>'+esc(w)+'</div></div>';});
@@ -687,7 +705,7 @@ function vRemedy(id){
   h+='</div>';
   setView(h);
 }
-function favRemDetail(id){toggleFav('remedies',id);var b=document.getElementById('remFav');if(b)b.classList.toggle('on',isFav('remedies',id));}
+function favRemDetail(id){toggleFav('remedies',id);var on=isFav('remedies',id);var b=document.getElementById('remFav');if(b){b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);}toast(on?'Saved to Favorites':'Removed');}
 function dosageChips(freq){
   var f=freq.toLowerCase(),slots;
   if(/as needed/.test(f))return chipLine([['clock','As needed']]);
@@ -756,7 +774,7 @@ function vCode(idx){
    +'<div class="codeacts">'
      +'<button class="cact" onclick="copyText(\''+c.c+'\')">'+svg('copy')+'Copy</button>'
      +'<button class="cact" onclick="shareCode('+idx+')">'+svg('share')+'Share</button>'
-     +'<button class="cact'+(fav?' on':'')+'" id="codeFav" onclick="favCode('+idx+')">'+svg('star')+'Favorite</button>'
+     +'<button class="cact'+(fav?' on':'')+'" id="codeFav" aria-pressed="'+fav+'" onclick="favCode('+idx+')">'+svg('star')+'Favorite</button>'
      +'<button class="cact" onclick="openFs('+idx+')">'+svg('expand')+'Fullscreen</button>'
    +'</div>';
   if(c.w){var nn=NOTES[c.w];h+='<div class="warnbox '+(nn.k==='dan'?'dan':'')+'"><span>'+svg('alert')+'</span><div>'+nn.t+'</div></div>';}
@@ -772,7 +790,7 @@ function vCode(idx){
   if(rel.length){h+='<div class="sect-h"><div class="h">More in '+esc(c.secLabel)+'</div></div>';rel.forEach(function(i){h+=codeRow(i);});}
   h+='</div>';setView(h);
 }
-function favCode(idx){toggleFav('codes',idx);var b=document.getElementById('codeFav');if(b)b.classList.toggle('on',isFav('codes',idx));}
+function favCode(idx){toggleFav('codes',idx);var on=isFav('codes',idx);var b=document.getElementById('codeFav');if(b){b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);}toast(on?'Saved to Favorites':'Removed');}
 function openFs(idx){var c=CODES[idx];document.getElementById('fsCond').textContent=cap(c.d);document.getElementById('fsNum').textContent=c.c;document.getElementById('fs').classList.add('open');}
 function closeFs(){document.getElementById('fs').classList.remove('open');}
 function shareCode(idx){var c=CODES[idx];var txt=c.c+' — '+cap(c.d)+' (Hospital in a Box)';
@@ -788,7 +806,7 @@ function vLibrary(){
    +'<div id="libBody"></div></div>';
   setView(h);renderLib();
 }
-function setLibTab(t){libTab=t;var tb=document.querySelectorAll('.tabs .tab');renderLib();
+function setLibTab(t){libTab=t;renderLib();
   var hs=document.querySelectorAll('.tabs .tab');for(var i=0;i<hs.length;i++)hs[i].classList.toggle('on',hs[i].textContent.toLowerCase().indexOf(t)===0);}
 function renderLib(){
   var b=document.getElementById('libBody');if(!b)return;
@@ -812,7 +830,9 @@ function vHerb(n){
   addRecent('herb',n,h.name,h.en);
   var fav=isFav('herbs',n);
   var ht=topBack(h.name,h.en)+'<div class="wrap">'
-   +'<div class="hero ac-'+PAL[n%PAL.length]+'"><div class="hicon" style="color:rgb(var(--ac))">'+svg(herbIcon(n))+'</div><div class="hcat" style="color:rgb(var(--ac))">Herb #'+n+'</div><div class="hname">'+esc(h.name)+'</div><div class="hsum"><i>'+esc(h.bot)+'</i> · '+esc(h.en)+'</div>'
+   +'<div class="hero ac-'+PAL[n%PAL.length]+'">'
+   +'<button class="icon-btn'+(fav?' on':'')+'" id="herbFav" style="position:absolute;right:16px;top:16px" aria-pressed="'+fav+'" onclick="favHerb('+n+')" aria-label="Save herb">'+svg('star')+'</button>'
+   +'<div class="hicon" style="color:rgb(var(--ac))">'+svg(herbIcon(n))+'</div><div class="hcat" style="color:rgb(var(--ac))">Herb #'+n+'</div><div class="hname">'+esc(h.name)+'</div><div class="hsum"><i>'+esc(h.bot)+'</i> · '+esc(h.en)+'</div>'
    +'<div class="hstats"><span class="hstat">'+svg(herbIcon(n))+'Part: '+esc(h.part)+'</span></div></div>';
   if(h.benefits)ht+='<div class="dsec"><div class="dsec-h">'+svg('heart')+'Traditionally used for</div><div style="display:flex;flex-wrap:wrap;gap:7px">'+h.benefits.split(', ').map(function(b){return '<span class="hstat">'+esc(b)+'</span>';}).join('')+'</div></div>';
   if(h.compound)ht+='<div class="dsec"><div class="dsec-h">'+svg('info')+'Active compound</div><div class="p">'+esc(h.compound)+'</div></div>';
@@ -820,6 +840,7 @@ function vHerb(n){
     h.related.forEach(function(rid){var r=RBYID(rid);if(r)ht+=remedyCard(r);});}
   ht+='</div>';setView(ht);
 }
+function favHerb(n){toggleFav('herbs',n);var on=isFav('herbs',n);var b=document.getElementById('herbFav');if(b){b.classList.toggle('on',on);b.setAttribute('aria-pressed',on);}toast(on?'Saved to Favorites':'Removed');}
 function vCompound(n){
   n=parseInt(n,10);var c=null;for(var i=0;i<COMPOUNDS.length;i++)if(COMPOUNDS[i].n===n)c=COMPOUNDS[i];
   if(!c){go('library');return;}
@@ -855,8 +876,8 @@ function vEmergencyDetail(id){
   if(!e){go('emergency');return;}
   var h=topBack(e.name,'Emergency')+'<div class="wrap">'
    +'<a class="btn dan" href="tel:112" style="margin-bottom:16px">'+svg('phone')+'Call emergency services now</a>'
-   +'<div class="dsec-h">'+svg('alert')+'Immediate actions</div>';
-  h+=e.steps.map(function(s,i){return '<div class="step"><div class="sn" style="background:var(--dan-bg);color:var(--danger)">'+(i+1)+'</div><div class="st">'+esc(s)+'</div></div>';}).join('');
+   +'<div class="dsec"><div class="dsec-h">'+svg('alert')+'Immediate actions</div>';
+  h+=e.steps.map(function(s,i){return '<div class="step"><div class="sn" style="background:var(--dan-bg);color:var(--danger)">'+(i+1)+'</div><div class="st">'+esc(s)+'</div></div>';}).join('')+'</div>';
   if(e.code){
     var idx=-1;for(var k=0;k<CODES.length;k++)if(CODES[k].c===e.code){idx=k;break;}
     h+='<div class="dsec" style="margin-top:14px"><div class="dsec-h">'+svg('code')+'Source\'s healing code</div>'
@@ -906,9 +927,9 @@ function vHowto(){
    +'<div class="step"><div class="sn">+</div><div class="st">Set an intention, then add the code to your food or water before consuming.</div></div>'
    +'<div class="sect-h"><div class="h">The Water Codes</div></div>'
    +'<div class="p" style="margin-bottom:10px">Write these on opposite sides of a water container to &ldquo;create a vortex&rdquo; in the water:</div>'
-   +'<div class="qrow" onclick="copyText(\'99 77 654\')"><div class="qcd">99 77 654</div><div class="qtx">One side of the container</div>'+svg('copy')+'</div>'
-   +'<div class="qrow" onclick="copyText(\'44 66 111\')"><div class="qcd">44 66 111</div><div class="qtx">The opposite side</div>'+svg('copy')+'</div>'
-   +'<div class="qrow" onclick="copyText(\'88 44 578\')"><div class="qcd">88 44 578</div><div class="qtx">Increases the nutrition of food &mdash; &ldquo;if you only use one, use this&rdquo;</div>'+svg('copy')+'</div>'
+   +'<button class="qrow" onclick="copyText(\'99 77 654\')" aria-label="Copy code 99 77 654"><div class="qcd">99 77 654</div><div class="qtx">One side of the container</div>'+svg('copy')+'</button>'
+   +'<button class="qrow" onclick="copyText(\'44 66 111\')" aria-label="Copy code 44 66 111"><div class="qcd">44 66 111</div><div class="qtx">The opposite side</div>'+svg('copy')+'</button>'
+   +'<button class="qrow" onclick="copyText(\'88 44 578\')" aria-label="Copy code 88 44 578"><div class="qcd">88 44 578</div><div class="qtx">Increases the nutrition of food &mdash; &ldquo;if you only use one, use this&rdquo;</div>'+svg('copy')+'</button>'
    +'<div class="warnbox"><span>'+svg('info')+'</span><div>Keep every space exactly as shown — the source says the codes will not work without them.</div></div>'
    +'</div>';setView(h);
 }
@@ -924,14 +945,31 @@ function vAbout(){
 /* ================= SEARCH ================= */
 function vSearch(){
   var h='<div class="top"><div class="top-row">'
-   +'<button class="t-back" onclick="back()">'+svg('back')+'</button>'
-   +'<div class="search" style="flex:1"><span>'+svg('search')+'</span><input id="sInput" placeholder="Search anything…" inputmode="search" autocomplete="off"><button class="clr" id="sClr" onclick="clearS()">'+svg('x')+'</button></div>'
-   +'</div></div><div class="wrap"><div id="sRes"></div></div>';
+   +'<button class="t-back" onclick="back()" aria-label="Back">'+svg('back')+'</button>'
+   +'<div class="search" style="flex:1"><span>'+svg('search')+'</span><input id="sInput" placeholder="Search anything…" inputmode="search" autocomplete="off" aria-label="Search"><button class="clr" id="sClr" onclick="clearS()" aria-label="Clear search">'+svg('x')+'</button><button class="micbtn t-pri" id="sMic" onclick="voiceSearch()" aria-label="Voice search">'+svg('mic')+'</button></div>'
+   +'</div></div><div class="wrap"><div id="sRes" aria-live="polite"></div></div>';
   setView(h);
   var inp=document.getElementById('sInput');
   inp.addEventListener('input',function(){doSearch(inp.value);});
+  if(!SR){var m=document.getElementById('sMic');if(m)m.style.display='none';}
   setTimeout(function(){inp.focus();},120);
   doSearch('');
+  if(voicePending){voicePending=false;setTimeout(voiceSearch,300);}
+}
+/* ===== voice search (progressive enhancement) ===== */
+var SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+var voicePending=false;
+function voiceHome(){if(!SR){go('search');return;}voicePending=true;go('search');}
+function voiceSearch(){
+  if(!SR)return;
+  var inp=document.getElementById('sInput');if(!inp)return;
+  var mic=document.getElementById('sMic');
+  var rec=new SR();rec.lang=navigator.language||'en-US';rec.interimResults=false;rec.maxAlternatives=1;
+  if(mic)mic.classList.add('listening');inp.placeholder='Listening…';
+  rec.onresult=function(e){var t=(e.results[0][0].transcript||'').trim();inp.value=t;doSearch(t);};
+  rec.onerror=function(){toast('Voice search unavailable');};
+  rec.onend=function(){if(mic)mic.classList.remove('listening');inp.placeholder='Search anything…';inp.focus();};
+  try{rec.start();}catch(e){}
 }
 function clearS(){var i=document.getElementById('sInput');if(i){i.value='';i.focus();}doSearch('');}
 var sT=null;
@@ -976,8 +1014,8 @@ function toast(label,cls,val){
 }
 
 /* ================= gate ================= */
-function openGate(){document.getElementById('gate').classList.add('open');}
-function acceptGate(){save('hib_ack',1);document.getElementById('gate').classList.remove('open');}
+function openGate(){document.getElementById('gate').classList.add('open');document.body.style.overflow='hidden';}
+function acceptGate(){save('hib_ack',1);document.getElementById('gate').classList.remove('open');document.body.style.overflow='';}
 
 /* ================= bottom nav ================= */
 var TABS=[['home','Home','home'],['remedies','Remedies','remedy'],['codes','Codes','code'],['library','Library','leaf'],['more','More','more']];
@@ -992,13 +1030,13 @@ function emptyArt(icon,title,sub,ctaLabel,ctaPath){
 }
 /* theme */
 function setTheme(t){
-  document.documentElement.setAttribute('data-theme',t);save('hib_theme',t);
+  document.documentElement.setAttribute('data-theme',t);document.documentElement.style.colorScheme=t;save('hib_theme',t);
   var m=document.querySelector('meta[name=theme-color]');if(m)m.setAttribute('content',t==='light'?'#F3EFE8':'#0F1115');
   var segs=document.querySelectorAll('#themeSeg button');for(var i=0;i<segs.length;i++)segs[i].classList.toggle('on',segs[i].getAttribute('data-t')===t);
 }
 function curTheme(){return document.documentElement.getAttribute('data-theme')||'dark';}
 function setNav(active){
-  TABS.forEach(function(t){var el=document.getElementById('bn-'+t[0]);if(el)el.classList.toggle('on',t[0]===active);});
+  TABS.forEach(function(t){var el=document.getElementById('bn-'+t[0]);if(el){var on=t[0]===active;el.classList.toggle('on',on);if(on)el.setAttribute('aria-current','page');else el.removeAttribute('aria-current');}});
 }
 
 /* ================= router ================= */
@@ -1008,6 +1046,7 @@ function router(){
   var r=parts[0]||'home';
   var navmap={home:'home',remedies:'remedies',remedy:'remedies',codes:'codes',code:'codes',library:'library',herb:'library',compound:'library',compounds:'library',more:'more',favorites:'more',about:'more',howto:'more',search:'home',emergency:'more'};
   setNav(navmap[r]||'home');
+  var fabEl=document.getElementById('fab');if(fabEl)fabEl.style.display=(r==='emergency')?'none':'';
   if(r==='home'||r==='')vHome();
   else if(r==='remedies')vRemedies();
   else if(r==='remedy')vRemedy(parts[1]);
@@ -1027,6 +1066,9 @@ function router(){
   else if(r==='search')vSearch();
   else vHome();
 }
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'&&document.getElementById('fs').classList.contains('open'))closeFs();
+});
 window.addEventListener('hashchange',router);
 setTheme(load('hib_theme','dark'));
 buildNav();
